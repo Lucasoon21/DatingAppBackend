@@ -1,7 +1,7 @@
 package com.lukasz.wolski.DatingAppBackend.datasource
 
-import com.lukasz.wolski.DatingAppBackend.model.User
+import com.lukasz.wolski.DatingAppBackend.model.UserInfo
 
 interface UserDataSource {
-    fun getUsereee(): Collection<User>
+    fun getUsereee(): Collection<UserInfo>
 }
