@@ -4,7 +4,7 @@ package com.lukasz.wolski.DatingAppBackend.model
 import javax.persistence.*
 
 @Entity
-class User {
+class UserInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
