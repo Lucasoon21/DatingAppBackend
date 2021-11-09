@@ -1,18 +1,50 @@
 package com.lukasz.wolski.DatingAppBackend.controller
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RestController
-import com.lukasz.wolski.DatingAppBackend.service.AuthService
-import org.springframework.beans.factory.annotation.Autowired
+import com.lukasz.wolski.DatingAppBackend.dtos.LoginDTO
+import com.lukasz.wolski.DatingAppBackend.dtos.RegisterDTO
+import com.lukasz.wolski.DatingAppBackend.model.UserInfo
+import com.lukasz.wolski.DatingAppBackend.services.UserService
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+import java.util.*
+import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletResponse
 
 @RestController
-public class AuthController {
+@RequestMapping("auth")
+class AuthController(private val userService: UserService) {
 
-//    @Autowired
-//    val authService: AuthService
+    @PostMapping("register")
+    fun register(@RequestBody body: RegisterDTO): ResponseEntity<UserInfo> {
+        val user = UserInfo()
+        user.email = body.email
+        user.password = body.password
+        return ResponseEntity.ok(this.userService.save(user))
+    }
 
-    @GetMapping("/")
-    public fun hello(): String {
-        return "Hello"
+    @PostMapping("login")
+    fun login(@RequestBody body: LoginDTO, response: HttpServletResponse ): ResponseEntity<Any> {
+        val user = this.userService.findByEmail(body.email) ?: return ResponseEntity.badRequest().body("Nie znaleziono")
+
+        if (!user.comparePassword(body.password)) {
+            return ResponseEntity.badRequest().body("Złe hasło")
+        }
+
+
+        val issuer = user.id.toString()
+
+        val jwt = Jwts.builder()
+            .setIssuer(issuer)
+            .setExpiration(Date(System.currentTimeMillis()+60*24*1000)) // 1 dzien _*60*24*1000
+            .signWith(SignatureAlgorithm.HS512, "sekret").compact()
+
+        val cookie = Cookie("jwt",jwt)
+        cookie.isHttpOnly = true
+        response.addCookie(cookie)
+
+        return ResponseEntity.ok("sukces")
+
     }
 }

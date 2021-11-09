@@ -177,6 +177,7 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-rest-hal-explorer:3.5.6" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.32" level="project" />
+    <orderEntry type="library" name="Maven: io.jsonwebtoken:jjwt:0.9.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-jpa:2.5.6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.5.6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-orm:5.3.12" level="project" />
