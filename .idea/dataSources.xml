@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="DatingAppDatabase" uuid="c4a867ce-0877-4ffb-8c78-117b05cfb1be">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <schema-control>AUTOMATIC</schema-control>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://ec2-34-250-16-127.eu-west-1.compute.amazonaws.com:5432/d5mgj16auip8fl</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
     <data-source source="LOCAL" name="DatingAppDatabaseOld" uuid="e6671bb6-eacf-4da3-a157-2b4a30b75913">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
