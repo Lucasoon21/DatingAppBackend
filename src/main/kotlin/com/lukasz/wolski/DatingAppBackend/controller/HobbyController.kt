@@ -2,13 +2,11 @@ package com.lukasz.wolski.DatingAppBackend.controller
 
 import com.lukasz.wolski.DatingAppBackend.dtos.InterestedHobbyDTO
 import com.lukasz.wolski.DatingAppBackend.dtos.HobbyUserDTO
+import com.lukasz.wolski.DatingAppBackend.dtos.InterestedRelationshipDTO
 import com.lukasz.wolski.DatingAppBackend.model.HobbyUserModel
 import com.lukasz.wolski.DatingAppBackend.model.InterestedHobbyModel
 import com.lukasz.wolski.DatingAppBackend.services.*
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
 
 @RestController
@@ -46,8 +44,26 @@ class HobbyController(private val profileService: ProfileService,
         }
     }
 
+    @PutMapping("editPreferences")
+    fun editHobbyPreferences(@RequestBody body: InterestedHobbyDTO, response: HttpServletResponse) {
+        println("edycja ")
+        if (this.profileService.profileExistById(body.profileId)) {
+            if(this.hobbyService.hobbyExistById(body.hobbyId)){
+                val profile = this.profileService.getProfileById(body.profileId)
+                val hobby = this.hobbyService.getHobbyById(body.hobbyId)
+                val oldHobbyPreferences = this.interestedHobbyService.getInterestedHobbyByProfileId(profile,hobby) // .getInterestedRelationshipByProfileId(profile,relationship)
+                oldHobbyPreferences.decison = body.decision
+                this.interestedHobbyService.save(oldHobbyPreferences)
+            } else {
+                println("Nie istnieje płeć lub orientacja")
+            }
+        } else {
+            println("taki profile nie istnieje")
+        }
+    }
 
-    @PostMapping("newHobbyUserPreferences")
+
+    @PostMapping("newHobbyUser")
     fun addHobbyUser(@RequestBody body: HobbyUserDTO, response: HttpServletResponse) {
          if(this.profileService.profileExistById(body.profileId)) {
             if(this.hobbyService.hobbyExistById(body.hobbyId)){
@@ -72,6 +88,25 @@ class HobbyController(private val profileService: ProfileService,
         }
         else {
             println("taki profil nie istnieje")
+        }
+    }
+
+
+    @PutMapping("editUserHobby")
+    fun editHobbyuser(@RequestBody body: HobbyUserDTO, response: HttpServletResponse) {
+        println("edycja ")
+        if (this.profileService.profileExistById(body.profileId)) {
+            if(this.hobbyService.hobbyExistById(body.hobbyId)){
+                val profile = this.profileService.getProfileById(body.profileId)
+                val hobby = this.hobbyService.getHobbyById(body.hobbyId)
+                val oldHobbyUser = this.hobbyUserService.getInterestedHobbyByProfileId(profile,hobby) // .getInterestedRelationshipByProfileId(profile,relationship)
+                oldHobbyUser.decison = body.decision
+                this.hobbyUserService.save(oldHobbyUser)
+            } else {
+                println("Nie istnieje płeć lub orientacja")
+            }
+        } else {
+            println("taki profile nie istnieje")
         }
     }
 

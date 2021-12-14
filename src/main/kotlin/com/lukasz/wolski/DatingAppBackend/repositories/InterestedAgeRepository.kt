@@ -5,5 +5,7 @@ import com.lukasz.wolski.DatingAppBackend.model.ProfileModel
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface InterestedAgeRepository: JpaRepository<InterestedAgeModel, Int> {
-    fun findInterestedAgeModelByProfile(Profile: ProfileModel): List<InterestedAgeModel>
+    fun findInterestedAgeModelByProfileId(Profile: ProfileModel): List<InterestedAgeModel>
+    fun findFirstByProfileId(profileId: ProfileModel)
+    fun findFirstInterestedAgeModelByProfileId(profileId: ProfileModel): InterestedAgeModel
 }

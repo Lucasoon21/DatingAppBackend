@@ -15,4 +15,7 @@ class HobbyUserService(private val hobbyUserRepository: HobbyUserRepository) {
     fun hobbyInterestedExists(profile: ProfileModel, hobby: TypeHobbyModel): List<HobbyUserModel> {
         return this.hobbyUserRepository.findHobbyUserModelByProfileAndHobby(profile,hobby)
     }
+    fun getInterestedHobbyByProfileId(idProfile: ProfileModel, idHobby: TypeHobbyModel): HobbyUserModel {
+        return this.hobbyUserRepository.findFirstInterestedHobbyModelByProfileAndHobby(idProfile, idHobby)
+    }
 }

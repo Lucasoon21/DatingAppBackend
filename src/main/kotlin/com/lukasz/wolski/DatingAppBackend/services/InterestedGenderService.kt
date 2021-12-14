@@ -1,9 +1,6 @@
 package com.lukasz.wolski.DatingAppBackend.services
 
-import com.lukasz.wolski.DatingAppBackend.model.BlockUserModel
-import com.lukasz.wolski.DatingAppBackend.model.InterestedGenderModel
-import com.lukasz.wolski.DatingAppBackend.model.ProfileModel
-import com.lukasz.wolski.DatingAppBackend.model.TypeGenderModel
+import com.lukasz.wolski.DatingAppBackend.model.*
 import com.lukasz.wolski.DatingAppBackend.repositories.InterestedGenderRepository
 import org.springframework.stereotype.Service
 
@@ -15,5 +12,7 @@ class InterestedGenderService(private val interestedGenderRepository: Interested
     fun save(interestedGender: InterestedGenderModel): InterestedGenderModel {
         return this.interestedGenderRepository.save(interestedGender)
     }
-
+    fun getInterestedGenderByProfileId(idProfile: ProfileModel, idGender: TypeGenderModel): InterestedGenderModel {
+        return this.interestedGenderRepository.findFirstInterestedGenderModelByProfileAndGender(idProfile, idGender)
+    }
 }

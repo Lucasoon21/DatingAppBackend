@@ -16,11 +16,11 @@ class SwipeDecisionModel {
 */
     @ManyToOne
     @JoinColumn(name="user_id_given")
-    var user_id_given: ProfileModel = ProfileModel()
+    var userGiven: ProfileModel = ProfileModel()
 
     @ManyToOne
     @JoinColumn(name="user_id_reciever")
-    var user_id_reciever: ProfileModel = ProfileModel()
+    var userReciever: ProfileModel = ProfileModel()
 
 
     @Column

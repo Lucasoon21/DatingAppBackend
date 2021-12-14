@@ -11,6 +11,9 @@ class InterestedAgeService(private val interestedAgePreferencesrepository: Inter
         return this.interestedAgePreferencesrepository.save(agePreferencesModel)
     }
     fun profileExist(profile: ProfileModel): List<InterestedAgeModel> {
-        return this.interestedAgePreferencesrepository.findInterestedAgeModelByProfile(profile)
+        return this.interestedAgePreferencesrepository.findInterestedAgeModelByProfileId(profile)
+    }
+    fun getInterestedAgeByProfileId(idProfile: ProfileModel): InterestedAgeModel {
+        return this.interestedAgePreferencesrepository.findFirstInterestedAgeModelByProfileId(idProfile)
     }
 }
