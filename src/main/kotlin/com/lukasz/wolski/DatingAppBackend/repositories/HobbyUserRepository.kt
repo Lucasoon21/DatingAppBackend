@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface HobbyUserRepository: JpaRepository<HobbyUserModel, Int> {
     fun findHobbyUserModelByProfileAndHobby(profile: ProfileModel, hobby: TypeHobbyModel): List<HobbyUserModel>
+    fun findFirstInterestedHobbyModelByProfileAndHobby(profileId: ProfileModel, hobbyId: TypeHobbyModel): HobbyUserModel
 
 }

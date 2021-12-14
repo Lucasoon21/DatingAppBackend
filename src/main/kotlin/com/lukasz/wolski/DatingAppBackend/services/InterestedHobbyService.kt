@@ -1,9 +1,6 @@
 package com.lukasz.wolski.DatingAppBackend.services
 
-import com.lukasz.wolski.DatingAppBackend.model.InterestedGenderModel
-import com.lukasz.wolski.DatingAppBackend.model.InterestedHobbyModel
-import com.lukasz.wolski.DatingAppBackend.model.ProfileModel
-import com.lukasz.wolski.DatingAppBackend.model.TypeHobbyModel
+import com.lukasz.wolski.DatingAppBackend.model.*
 import com.lukasz.wolski.DatingAppBackend.repositories.InterestedHobbyRepository
 import org.springframework.stereotype.Service
 
@@ -14,5 +11,8 @@ class InterestedHobbyService(private val interestedHobbyRepository: InterestedHo
     }
     fun hobbyInterestedExists(profile: ProfileModel, hobby: TypeHobbyModel): List<InterestedHobbyModel> {
         return this.interestedHobbyRepository.findInterestedHobbyModelByProfileAndHobby(profile,hobby)
+    }
+    fun getInterestedHobbyByProfileId(idProfile: ProfileModel, idHobby: TypeHobbyModel): InterestedHobbyModel {
+        return this.interestedHobbyRepository.findFirstInterestedHobbyModelByProfileAndHobby(idProfile, idHobby)
     }
 }

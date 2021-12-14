@@ -22,5 +22,5 @@ class InterestedAgeModel {
     * */
     @OneToOne
     @JoinColumn(name="profile_id")
-    var profile: ProfileModel = ProfileModel()
+    var profileId: ProfileModel = ProfileModel()
 }

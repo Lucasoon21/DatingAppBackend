@@ -9,4 +9,11 @@ class OrientationService(private val typeOrienatationRepository: TypeOrienatatio
     fun getOrientation(id: Int) : TypeOrientationModel? {
         return this.typeOrienatationRepository.getAllById(id)
     }
+
+    fun orientationExistsById(id: Int) : Boolean {
+        return this.typeOrienatationRepository.existsById(id)
+    }
+    fun getOrientationById(id: Int) : TypeOrientationModel? {
+        return this.typeOrienatationRepository.getById(id)
+    }
 }

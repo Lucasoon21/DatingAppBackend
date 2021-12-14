@@ -4,5 +4,7 @@ import com.lukasz.wolski.DatingAppBackend.model.*
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface InterestedRelationshipRepository:JpaRepository<InterestedRelationshipModel,Int> {
-fun findInterestedRelationshipModelByProfileAndRelationship(profile: ProfileModel, gender: TypeRelationshipModel): List<InterestedRelationshipModel>
+    fun findInterestedRelationshipModelByProfileAndRelationship(profile: ProfileModel, gender: TypeRelationshipModel): List<InterestedRelationshipModel>
+    fun findFirstInterestedRelationshipModelByProfileAndRelationship(profileId: ProfileModel, relationshipId: TypeRelationshipModel): InterestedRelationshipModel
+
 }

@@ -12,4 +12,7 @@ class InterestedRelationshipService(private val interstedRelationshipRepository:
     fun relationshipPreferencesExists(profile: ProfileModel, gender: TypeRelationshipModel): List<InterestedRelationshipModel> {
         return this.interstedRelationshipRepository.findInterestedRelationshipModelByProfileAndRelationship(profile,gender)
     }
+    fun getInterestedRelationshipByProfileId(idProfile: ProfileModel, idRelationship: TypeRelationshipModel): InterestedRelationshipModel {
+        return this.interstedRelationshipRepository.findFirstInterestedRelationshipModelByProfileAndRelationship(idProfile, idRelationship)
+    }
 }

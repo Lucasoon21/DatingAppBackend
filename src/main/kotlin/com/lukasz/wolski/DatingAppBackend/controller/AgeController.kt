@@ -3,10 +3,7 @@ package com.lukasz.wolski.DatingAppBackend.controller
 import com.lukasz.wolski.DatingAppBackend.dtos.InterestedAgeDTO
 import com.lukasz.wolski.DatingAppBackend.model.InterestedAgeModel
 import com.lukasz.wolski.DatingAppBackend.services.*
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
 @RestController
 @RequestMapping("age")
@@ -31,7 +28,7 @@ class AgeController(private val interestedAgeService: InterestedAgeService,
                     val agePreferencesModel = InterestedAgeModel()
                     agePreferencesModel.age_from=body.ageFrom
                     agePreferencesModel.age_to=body.ageTo
-                    agePreferencesModel.profile=profile
+                    agePreferencesModel.profileId=profile
                     this.interestedAgeService.save(agePreferencesModel)
                     println("Wiek nie istnieje")
                 }
@@ -47,6 +44,25 @@ class AgeController(private val interestedAgeService: InterestedAgeService,
             println("profil nie istnieje")
         }
 
+    }
+
+
+    @PutMapping("edit")
+    fun editAgePreferences(@RequestBody body: InterestedAgeDTO, response: HttpServletResponse) {
+        println("edycja wieku")
+        if (this.profileService.profileExistById(body.profileId)) {
+            if(body.ageFrom<body.ageTo && body.ageFrom>18 && body.ageTo<100) {
+                var profile = this.profileService.getProfileById(body.profileId)
+                var oldAgePreferences = this.interestedAgeService.getInterestedAgeByProfileId(profile)
+                oldAgePreferences.age_from = body.ageFrom
+                oldAgePreferences.age_to = body.ageTo
+                this.interestedAgeService.save(oldAgePreferences)
+            } else {
+                println("Nie istnieje płeć lub orientacja")
+            }
+        } else {
+            println("taki profile nie istnieje")
+        }
     }
 
 }
