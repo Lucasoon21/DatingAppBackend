@@ -1,11 +1,6 @@
 package com.lukasz.wolski.DatingAppBackend.controller
 
 import com.lukasz.wolski.DatingAppBackend.dtos.ProfileDTO
-import com.lukasz.wolski.DatingAppBackend.dtos.RegisterDTO
-import com.lukasz.wolski.DatingAppBackend.dtos.RegisterDetailsDTO
-import com.lukasz.wolski.DatingAppBackend.model.ProfileModel
-import com.lukasz.wolski.DatingAppBackend.model.TypeGenderModel
-import com.lukasz.wolski.DatingAppBackend.model.TypeOrientationModel
 import com.lukasz.wolski.DatingAppBackend.services.GenderService
 import com.lukasz.wolski.DatingAppBackend.services.OrientationService
 import com.lukasz.wolski.DatingAppBackend.services.ProfileService
@@ -31,10 +26,10 @@ class ProfileUserController(
                 val orientation = this.orientationService.getOrientation(body.orientationId)
                 val oldProfile = this.profileService.getProfileById(body.profileId)
                 if (gender != null) {
-                    oldProfile.typeGender = gender
+                    oldProfile.dictionaryGender = gender
                 }
                 if (orientation != null) {
-                    oldProfile.typeOrientation = orientation
+                    oldProfile.dictionaryOrientation = orientation
                 }
                 oldProfile.description = body.description
                 this.profileService.save(oldProfile)

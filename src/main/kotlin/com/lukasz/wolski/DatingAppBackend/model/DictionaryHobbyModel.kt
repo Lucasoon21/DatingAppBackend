@@ -3,7 +3,7 @@ package com.lukasz.wolski.DatingAppBackend.model
 import javax.persistence.*
 
 @Entity(name="D_Hobby")
-class TypeHobbyModel {
+class DictionaryHobbyModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Int = 0

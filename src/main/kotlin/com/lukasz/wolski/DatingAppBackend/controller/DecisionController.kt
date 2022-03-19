@@ -1,7 +1,6 @@
 package com.lukasz.wolski.DatingAppBackend.controller
 
 import com.lukasz.wolski.DatingAppBackend.dtos.BlockUserDTO
-import com.lukasz.wolski.DatingAppBackend.dtos.InterestedRelationshipDTO
 import com.lukasz.wolski.DatingAppBackend.dtos.SwipeDTO
 import com.lukasz.wolski.DatingAppBackend.model.BlockUserModel
 import com.lukasz.wolski.DatingAppBackend.model.SwipeDecisionModel
@@ -55,7 +54,7 @@ class DecisionController(private val profileService: ProfileService,
             if(checkSwipe.isEmpty()){
                 println("nie istnieje taki rekord")
                 swipe.userGiven = profile
-                swipe.userReciever = selectProfile
+                swipe.userReceiver = selectProfile
                 this.swipeDecisionService.save(swipe)
             }
             else{
@@ -76,7 +75,7 @@ class DecisionController(private val profileService: ProfileService,
                 val profileSelect = this.profileService.getProfileById(body.selectProfileUserId)
                 val pair = this.swipeDecisionService.getPair(profile,profileSelect)
 
-                 pair.decison = body.decision
+                 pair.decision = body.decision
                 this.swipeDecisionService.save(pair)
 
         } else {

@@ -14,7 +14,7 @@ class InterestedRelationshipModel {
 
     @ManyToOne
     @JoinColumn(name="relationship_id")
-    var relationship:TypeRelationshipModel = TypeRelationshipModel()
+    var relationship:DictionaryRelationshipModel = DictionaryRelationshipModel()
 
     @Column
     var decison: Int = 0

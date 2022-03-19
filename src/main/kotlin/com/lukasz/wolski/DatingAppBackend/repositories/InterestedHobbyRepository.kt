@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface InterestedHobbyRepository:JpaRepository<InterestedHobbyModel,Int> {
 
-    fun findInterestedHobbyModelByProfileAndHobby(profile:ProfileModel, hobby: TypeHobbyModel): List<InterestedHobbyModel>
+    fun findInterestedHobbyModelByProfileAndHobby(profile:ProfileModel, hobby: DictionaryHobbyModel): List<InterestedHobbyModel>
 
-    fun findFirstInterestedHobbyModelByProfileAndHobby(profileId: ProfileModel, hobbyId: TypeHobbyModel): InterestedHobbyModel
+    fun findFirstInterestedHobbyModelByProfileAndHobby(profileId: ProfileModel, hobbyId: DictionaryHobbyModel): InterestedHobbyModel
 }

@@ -23,7 +23,7 @@ class InterestedHobbyModel {
 
     @ManyToOne
     @JoinColumn(name="hobby_id")
-    var hobby: TypeHobbyModel = TypeHobbyModel()
+    var hobby: DictionaryHobbyModel = DictionaryHobbyModel()
 
     @Column
     var decison: Int = 0

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface InterestedGenderRepository:JpaRepository<InterestedGenderModel, Int> {
 
-    fun findInterestedGenderModelByProfileAndGender(profile: ProfileModel, gender: TypeGenderModel): List<InterestedGenderModel>
-    fun findFirstInterestedGenderModelByProfileAndGender(profileId: ProfileModel, genderId: TypeGenderModel): InterestedGenderModel
+    fun findInterestedGenderModelByProfileAndGender(profile: ProfileModel, gender: DictionaryGenderModel): List<InterestedGenderModel>
+    fun findFirstInterestedGenderModelByProfileAndGender(profileId: ProfileModel, genderId: DictionaryGenderModel): InterestedGenderModel
 }

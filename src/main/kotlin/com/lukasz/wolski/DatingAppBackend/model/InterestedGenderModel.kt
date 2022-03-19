@@ -23,5 +23,5 @@ class InterestedGenderModel {
 
     @ManyToOne
     @JoinColumn(name="gender_id")
-    var gender: TypeGenderModel = TypeGenderModel()
+    var gender: DictionaryGenderModel = DictionaryGenderModel()
 }

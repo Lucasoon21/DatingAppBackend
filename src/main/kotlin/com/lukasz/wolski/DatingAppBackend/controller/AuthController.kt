@@ -8,7 +8,6 @@ import com.lukasz.wolski.DatingAppBackend.dtos.LoginDTO
 import com.lukasz.wolski.DatingAppBackend.dtos.RegisterDTO
 import com.lukasz.wolski.DatingAppBackend.dtos.RegisterDetailsDTO
 import com.lukasz.wolski.DatingAppBackend.model.ProfileModel
-import com.lukasz.wolski.DatingAppBackend.model.TypeGenderModel
 import com.lukasz.wolski.DatingAppBackend.model.UserModel
 import com.lukasz.wolski.DatingAppBackend.services.GenderService
 import com.lukasz.wolski.DatingAppBackend.services.OrientationService
@@ -55,6 +54,7 @@ class AuthController(private val userService: UserService,
     @PostMapping("registerDetails")
     fun registerDetails(@RequestBody body: RegisterDetailsDTO, response: HttpServletResponse) {
         println("rejestracja detale")
+        println(body.orientation)
         val profile = ProfileModel()
         profile.data_birth = body.dateBirth
         profile.name = body.name
@@ -70,32 +70,36 @@ class AuthController(private val userService: UserService,
                 if(gender != null){
                     if(orientation != null) {
                         profile.user = user
-                        profile.typeGender = gender
-                        profile.typeOrientation = orientation
+                        profile.dictionaryGender = gender
+                        profile.dictionaryOrientation = orientation
                         this.profileService.save(profile)
                         return response.setStatus(HttpServletResponse.SC_ACCEPTED)
                     }
                     else {
                         println("Nie znaleziono orientacji")
+                        return  response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE)
                     }
                 }
                 else {
                     println("Nie znaleziono plci")
-                    //return response.setStatus(HttpServletResponse.SC_NOT_FOUND)
+                    return  response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE)
                 }
             }
             else {
                 println("użytkownik już istnieje")
+                return  response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE)
             }
         }
         else {
             println("nie znaleziono uzytkownika")
+            return  response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE)
         }
     }
 
     @PostMapping("login")
     fun login(@RequestBody body: LoginDTO, response: HttpServletResponse): ResponseEntity<String> {
         println("proba logowania")
+        println(body)
         val userLogin = this.userService.findByEmail(body.email) ?: return ResponseEntity.badRequest().body("Nie znaleziono")
         if (!userLogin.comparePassword(body.password)) {
             return ResponseEntity.badRequest().body("Złe hasło")
@@ -175,8 +179,9 @@ Oznacza to, że token odświeżania to artefakt poświadczeń, który umożliwia
     }
 
     @GetMapping("testApi")
-    fun tescik1():String {
+    fun tescik1(response: HttpServletResponse):String {
         println("proba ")
+        println(response)
         return "hello1"
     }
     @GetMapping("test/tescik2")

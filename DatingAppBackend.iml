@@ -16,7 +16,7 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="DatingAppBackend" />
-          <factory-entry name="entityManagerFactory" />
+          <factory-entry name="entityManagerFactory" value="e6671bb6-eacf-4da3-a157-2b4a30b75913" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

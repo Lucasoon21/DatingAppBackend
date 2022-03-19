@@ -1,9 +1,8 @@
 package com.lukasz.wolski.DatingAppBackend.repositories
 
-import com.lukasz.wolski.DatingAppBackend.model.TypeGenderModel
-import com.lukasz.wolski.DatingAppBackend.model.TypeHobbyModel
+import com.lukasz.wolski.DatingAppBackend.model.DictionaryHobbyModel
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface TypeHobbyRepository: JpaRepository<TypeHobbyModel, Int> {
-    fun getAllById(id: Int): TypeHobbyModel?
+interface TypeHobbyRepository: JpaRepository<DictionaryHobbyModel, Int> {
+    fun getAllById(id: Int): DictionaryHobbyModel?
 }
