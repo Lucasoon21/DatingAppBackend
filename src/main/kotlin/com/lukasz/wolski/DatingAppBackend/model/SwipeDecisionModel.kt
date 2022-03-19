@@ -19,11 +19,11 @@ class SwipeDecisionModel {
     var userGiven: ProfileModel = ProfileModel()
 
     @ManyToOne
-    @JoinColumn(name="user_id_reciever")
-    var userReciever: ProfileModel = ProfileModel()
+    @JoinColumn(name="user_id_receiver")
+    var userReceiver: ProfileModel = ProfileModel()
 
 
     @Column
-    var decison: Int = 0
+    var decision: Int = 0
 
 }

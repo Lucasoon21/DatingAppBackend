@@ -2,8 +2,9 @@ package com.lukasz.wolski.DatingAppBackend.model
 
 import javax.persistence.*
 
-@Entity(name="D_Relationship_type")
-class TypeRelationshipModel {
+
+@Entity(name="D_zodiac")
+class DictionaryZodiacModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Int = 0

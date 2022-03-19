@@ -10,10 +10,10 @@ class SwipeDecisionService(private val swipeRepository: SwipeRepository) {
         return this.swipeRepository.save(swipeDecision)
     }
     fun swipeExists(profile: ProfileModel, profileSwipe: ProfileModel): List<SwipeDecisionModel> {
-        return this.swipeRepository.findSwipeDecisionModelByUserGivenAndUserReciever(profile, profileSwipe)
+        return this.swipeRepository.findSwipeDecisionModelByUserGivenAndUserReceiver(profile, profileSwipe)
     }
     fun getPair(idProfile: ProfileModel, idProfileSelect: ProfileModel): SwipeDecisionModel {
-        return this.swipeRepository.findFirstSwipeDecisionModelByUserGivenAndUserReciever(idProfile, idProfileSelect)
+        return this.swipeRepository.findFirstSwipeDecisionModelByUserGivenAndUserReceiver(idProfile, idProfileSelect)
     }
 
 }

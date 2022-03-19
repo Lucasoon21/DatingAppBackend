@@ -9,10 +9,10 @@ class InterestedRelationshipService(private val interstedRelationshipRepository:
     fun save(interestedRelationship: InterestedRelationshipModel): InterestedRelationshipModel {
         return this.interstedRelationshipRepository.save(interestedRelationship)
     }
-    fun relationshipPreferencesExists(profile: ProfileModel, gender: TypeRelationshipModel): List<InterestedRelationshipModel> {
+    fun relationshipPreferencesExists(profile: ProfileModel, gender: DictionaryRelationshipModel): List<InterestedRelationshipModel> {
         return this.interstedRelationshipRepository.findInterestedRelationshipModelByProfileAndRelationship(profile,gender)
     }
-    fun getInterestedRelationshipByProfileId(idProfile: ProfileModel, idRelationship: TypeRelationshipModel): InterestedRelationshipModel {
+    fun getInterestedRelationshipByProfileId(idProfile: ProfileModel, idRelationship: DictionaryRelationshipModel): InterestedRelationshipModel {
         return this.interstedRelationshipRepository.findFirstInterestedRelationshipModelByProfileAndRelationship(idProfile, idRelationship)
     }
 }

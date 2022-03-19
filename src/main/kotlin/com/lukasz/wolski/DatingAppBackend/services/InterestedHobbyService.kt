@@ -9,10 +9,10 @@ class InterestedHobbyService(private val interestedHobbyRepository: InterestedHo
     fun save(interestedHobby: InterestedHobbyModel): InterestedHobbyModel {
         return this.interestedHobbyRepository.save(interestedHobby)
     }
-    fun hobbyInterestedExists(profile: ProfileModel, hobby: TypeHobbyModel): List<InterestedHobbyModel> {
+    fun hobbyInterestedExists(profile: ProfileModel, hobby: DictionaryHobbyModel): List<InterestedHobbyModel> {
         return this.interestedHobbyRepository.findInterestedHobbyModelByProfileAndHobby(profile,hobby)
     }
-    fun getInterestedHobbyByProfileId(idProfile: ProfileModel, idHobby: TypeHobbyModel): InterestedHobbyModel {
+    fun getInterestedHobbyByProfileId(idProfile: ProfileModel, idHobby: DictionaryHobbyModel): InterestedHobbyModel {
         return this.interestedHobbyRepository.findFirstInterestedHobbyModelByProfileAndHobby(idProfile, idHobby)
     }
 }

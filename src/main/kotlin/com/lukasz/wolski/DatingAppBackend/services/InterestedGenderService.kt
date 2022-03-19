@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service
 
 @Service
 class InterestedGenderService(private val interestedGenderRepository: InterestedGenderRepository) {
-    fun genderPreferencesExists(profile: ProfileModel, gender: TypeGenderModel): List<InterestedGenderModel> {
+    fun genderPreferencesExists(profile: ProfileModel, gender: DictionaryGenderModel): List<InterestedGenderModel> {
         return this.interestedGenderRepository.findInterestedGenderModelByProfileAndGender(profile,gender)
     }
     fun save(interestedGender: InterestedGenderModel): InterestedGenderModel {
         return this.interestedGenderRepository.save(interestedGender)
     }
-    fun getInterestedGenderByProfileId(idProfile: ProfileModel, idGender: TypeGenderModel): InterestedGenderModel {
+    fun getInterestedGenderByProfileId(idProfile: ProfileModel, idGender: DictionaryGenderModel): InterestedGenderModel {
         return this.interestedGenderRepository.findFirstInterestedGenderModelByProfileAndGender(idProfile, idGender)
     }
 }

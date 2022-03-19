@@ -32,11 +32,11 @@ class ProfileModel{
 */
     @ManyToOne
     @JoinColumn(name="orienatation_id")
-    var typeOrientation: TypeOrientationModel = TypeOrientationModel()
+    var dictionaryOrientation: DictionaryOrientationModel = DictionaryOrientationModel()
 
     @ManyToOne
     @JoinColumn(name="gender_id")
-    var typeGender: TypeGenderModel = TypeGenderModel()
+    var dictionaryGender: DictionaryGenderModel = DictionaryGenderModel()
 
 
 
