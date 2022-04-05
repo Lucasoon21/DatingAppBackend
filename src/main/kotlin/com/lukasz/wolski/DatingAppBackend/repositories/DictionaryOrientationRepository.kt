@@ -5,4 +5,5 @@ import com.lukasz.wolski.DatingAppBackend.model.DictionaryOrientationModel
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface DictionaryOrientationRepository: JpaRepository<DictionaryOrientationModel, Int> {
+    fun getAllById(id: Int): DictionaryOrientationModel?
 }

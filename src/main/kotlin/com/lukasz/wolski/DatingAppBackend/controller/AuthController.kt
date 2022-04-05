@@ -104,14 +104,30 @@ class AuthController(private val userService: UserService,
         if (!userLogin.comparePassword(body.password)) {
             return ResponseEntity.badRequest().body("Złe hasło")
         }
+
+
+        val userId = this.userService.findIdByEmail(body.email)
+        val userProfile = userService.getUser(body.email)
+        println("user profil")
+
+        if (userProfile != null) {
+            println(userProfile.id)
+        }
+
+
+        val profileId = profileService.findIdByUser(body.email)
+
         val accessToken:String = getAccessToken(body.email)
         val refreshToken:String = getRefreshToken(body.email)
         val tokens: MutableMap<String, String> = HashMap()
         tokens["access_token"] = accessToken
         tokens["refresh_token"] = refreshToken
+        tokens["profile_id"] = profileId.toString()
+        tokens["user_id"] = userId.toString()
         response.contentType = APPLICATION_JSON_VALUE
         ObjectMapper().writeValue(response.outputStream, tokens)
         val user: LoginDTO = LoginDTO(body.email, body.password, accessToken, refreshToken)
+        println(user)
         return ResponseEntity.ok().body("Zalogowano\n"+user)
     }
 
