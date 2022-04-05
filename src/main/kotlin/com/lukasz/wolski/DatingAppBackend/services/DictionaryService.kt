@@ -51,4 +51,30 @@ class DictionaryService(private val dictionaryAlcoholRepository: DictionaryAlcoh
     fun getAllZodiacDictionary(): List<DictionaryZodiacModel>? {
         return this.dictionaryZodiacRepository.findAll()
     }
+
+
+
+    fun getAlcohol(id: Int): DictionaryAlcoholModel? {
+        return this.dictionaryAlcoholRepository.getAllById(id)
+    }
+    fun getChildren(id: Int): DictionaryChildrenModel? {
+        return this.dictionaryChildrenRepository.getAllById(id)
+    }
+    fun getCigarettes(id: Int): DictionaryCigarettesModel? {
+        return this.dictionaryCigarettesRepository.getAllById(id)
+    }
+    fun getEducation(id: Int): DictionaryEducationModel? {
+        return this.dictionaryEducationRepository.getAllById(id)
+    }
+    fun getEyeColor(id: Int): DictionaryEyeColorModel? {
+        return this.dictionaryEyeColorRepository.getAllById(id)
+    }
+    fun getReligious(id: Int): DictionaryReligiousModel? {
+        return this.dictionaryReligiousRepository.getAllById(id)
+    }
+    fun getZodiac(id: Int): DictionaryZodiacModel? {
+        return this.dictionaryZodiacRepository.getAllById(id)
+    }
+
+
 }

@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface ProfileRepository: JpaRepository<ProfileModel, Int> {
     fun findByUser(user: UserModel): ProfileModel?
     fun getProfileModelById(user: ProfileModel): ProfileModel
+    fun getProfileModelByUser(user: UserModel): ProfileModel?
+    fun findFirstByUser(user: Int): ProfileModel
 }
