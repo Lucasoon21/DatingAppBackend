@@ -15,4 +15,14 @@ class InterestedHobbyService(private val interestedHobbyRepository: InterestedHo
     fun getInterestedHobbyByProfileId(idProfile: ProfileModel, idHobby: DictionaryHobbyModel): InterestedHobbyModel {
         return this.interestedHobbyRepository.findFirstInterestedHobbyModelByProfileAndHobby(idProfile, idHobby)
     }
+    fun getAllInterestedHobbyByProfile(profile: ProfileModel): List<InterestedHobbyModel> {
+        return this.interestedHobbyRepository.findAllByProfile(profile)
+    }
+
+    fun getPreferencesHobbyByHobbyIdAndProfileId(profile: ProfileModel, hobby: DictionaryHobbyModel): InterestedHobbyModel? {
+        return this.interestedHobbyRepository.findAllByProfileAndHobby(profile,hobby)
+
+    }
+
+
 }
