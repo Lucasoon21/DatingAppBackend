@@ -8,11 +8,11 @@ class InterestedRelationshipModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Int = 0
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="profile_id")
     var profile: ProfileModel = ProfileModel()
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="relationship_id")
     var relationship:DictionaryRelationshipModel = DictionaryRelationshipModel()
 

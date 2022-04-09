@@ -99,9 +99,11 @@ class HobbyController(private val profileService: ProfileService,
             if(this.hobbyService.hobbyExistById(body.hobbyId)){
                 val profile = this.profileService.getProfileById(body.profileId)
                 val hobby = this.hobbyService.getHobbyById(body.hobbyId)
-                val oldHobbyUser = this.hobbyUserService.getInterestedHobbyByProfileId(profile,hobby) // .getInterestedRelationshipByProfileId(profile,relationship)
-                oldHobbyUser.decison = body.decision
-                this.hobbyUserService.save(oldHobbyUser)
+                val oldHobbyUser = this.hobbyUserService.getHobbyUserByHobbyIdAndProfileId(profile,hobby) // .getInterestedRelationshipByProfileId(profile,relationship)
+                if (oldHobbyUser != null) {
+                    oldHobbyUser.decison = body.decision
+                    this.hobbyUserService.save(oldHobbyUser)
+                }
             } else {
                 println("Nie istnieje płeć lub orientacja")
             }

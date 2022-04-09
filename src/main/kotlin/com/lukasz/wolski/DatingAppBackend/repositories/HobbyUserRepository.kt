@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface HobbyUserRepository: JpaRepository<HobbyUserModel, Int> {
     fun findHobbyUserModelByProfileAndHobby(profile: ProfileModel, hobby: DictionaryHobbyModel): List<HobbyUserModel>
-    fun findFirstInterestedHobbyModelByProfileAndHobby(profileId: ProfileModel, hobbyId: DictionaryHobbyModel): HobbyUserModel
-
+    //fun findFirstInterestedHobbyModelByProfileAndHobby(profileId: ProfileModel, hobbyId: DictionaryHobbyModel): HobbyUserModel
+    fun findAllByProfile(profileId: ProfileModel): List<HobbyUserModel>
+    fun findAllByProfileAndHobby(profile: ProfileModel, hobby: DictionaryHobbyModel): HobbyUserModel?
 }

@@ -54,9 +54,11 @@ class AgeController(private val interestedAgeService: InterestedAgeService,
             if(body.ageFrom<body.ageTo && body.ageFrom>18 && body.ageTo<100) {
                 var profile = this.profileService.getProfileById(body.profileId)
                 var oldAgePreferences = this.interestedAgeService.getInterestedAgeByProfileId(profile)
-                oldAgePreferences.age_from = body.ageFrom
-                oldAgePreferences.age_to = body.ageTo
-                this.interestedAgeService.save(oldAgePreferences)
+                if (oldAgePreferences != null) {
+                    oldAgePreferences.age_from = body.ageFrom
+                    oldAgePreferences.age_to = body.ageTo
+                    this.interestedAgeService.save(oldAgePreferences)
+                }
             } else {
                 println("Nie istnieje płeć lub orientacja")
             }
