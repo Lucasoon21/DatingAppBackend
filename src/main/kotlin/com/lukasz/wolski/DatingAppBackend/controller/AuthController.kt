@@ -179,7 +179,7 @@ Oznacza to, że token odświeżania to artefakt poświadczeń, który umożliwia
         val token: String = JWT.create()
             .withSubject(mail)
             .withIssuedAt(Date(System.currentTimeMillis()))
-            .withExpiresAt(Date(System.currentTimeMillis()+(1000*60*60)))
+            .withExpiresAt(Date(System.currentTimeMillis()+(1000*60*600)))
             .sign(algorithm);
         return token
     }

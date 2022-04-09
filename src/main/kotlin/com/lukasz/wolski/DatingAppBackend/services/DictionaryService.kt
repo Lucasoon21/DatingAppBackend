@@ -75,6 +75,10 @@ class DictionaryService(private val dictionaryAlcoholRepository: DictionaryAlcoh
     fun getZodiac(id: Int): DictionaryZodiacModel? {
         return this.dictionaryZodiacRepository.getAllById(id)
     }
-
-
+    fun getHobby(id: Int): DictionaryHobbyModel? {
+        return this.dictionaryHobbyRepository.getAllById(id)
+    }
+    fun getRelationship(id: Int): DictionaryRelationshipModel? {
+        return this.dictionaryRelationshipRepository.getAllById(id)
+    }
 }

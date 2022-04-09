@@ -1,8 +1,10 @@
 package com.lukasz.wolski.DatingAppBackend.controller
 
+import com.lukasz.wolski.DatingAppBackend.dtos.InterestedAgeDTO
+import com.lukasz.wolski.DatingAppBackend.model.InterestedAgeModel
 import com.lukasz.wolski.DatingAppBackend.services.*
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("preferences")
@@ -16,7 +18,32 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
                             private val interestedRelationshipService: InterestedRelationshipService,
                             ){
 
+    @PutMapping("changeAgePreferences")
+    fun editAgePreferences(@RequestBody body: InterestedAgeDTO, response: HttpServletResponse) {
+        println("edycja wieku")
+        if (this.profileService.profileExistById(body.profileId)) {
+            if(body.ageFrom<body.ageTo && body.ageFrom>18 && body.ageTo<100) {
+                val profile = this.profileService.getProfileById(body.profileId)
+                var oldAgePreferences = this.interestedAgeService.getInterestedAgeByProfileId(profile)
+                if(oldAgePreferences!=null) {
+                    oldAgePreferences.age_from = body.ageFrom
+                    oldAgePreferences.age_to = body.ageTo
+                    this.interestedAgeService.save(oldAgePreferences)
+                } else {
+                    val agePreferencesModel = InterestedAgeModel()
+                    agePreferencesModel.age_from=body.ageFrom
+                    agePreferencesModel.age_to=body.ageTo
+                    agePreferencesModel.profileId=profile
+                    this.interestedAgeService.save(agePreferencesModel)
+                }
 
+            } else {
+                println("Błędny wiek ")
+            }
+        } else {
+            println("taki profil nie istnieje")
+        }
+    }
 
 
 

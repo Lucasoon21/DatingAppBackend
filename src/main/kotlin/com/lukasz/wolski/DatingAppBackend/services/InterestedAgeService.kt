@@ -13,7 +13,7 @@ class InterestedAgeService(private val interestedAgePreferencesrepository: Inter
     fun profileExist(profile: ProfileModel): List<InterestedAgeModel> {
         return this.interestedAgePreferencesrepository.findInterestedAgeModelByProfileId(profile)
     }
-    fun getInterestedAgeByProfileId(idProfile: ProfileModel): InterestedAgeModel {
+    fun getInterestedAgeByProfileId(idProfile: ProfileModel): InterestedAgeModel? {
         return this.interestedAgePreferencesrepository.findFirstInterestedAgeModelByProfileId(idProfile)
     }
 }
