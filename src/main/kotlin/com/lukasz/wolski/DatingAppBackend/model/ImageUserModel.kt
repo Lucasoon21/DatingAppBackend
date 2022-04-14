@@ -1,5 +1,6 @@
 package com.lukasz.wolski.DatingAppBackend.model
 
+import java.util.*
 import javax.persistence.*
 
 @Entity(name="Image")
@@ -9,10 +10,16 @@ class ImageUserModel {
     var id: Int = 0
 
     @Column
-    var Image: String =""
+    var imageLink: String =""
 
     @Column
-    var active: Boolean = true
+    var deleteHashImgur: String =""
+
+    @Column
+    var idImgur: String =""
+
+    @Column
+    var createDate: Date = Date()
 /*
     @Column
     var id_user: Int = 0

@@ -3,12 +3,14 @@ package com.lukasz.wolski.DatingAppBackend.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lukasz.wolski.DatingAppBackend.dtos.*
 import com.lukasz.wolski.DatingAppBackend.model.HobbyUserModel
+import com.lukasz.wolski.DatingAppBackend.model.ImageUserModel
 import com.lukasz.wolski.DatingAppBackend.model.InterestedRelationshipModel
 import com.lukasz.wolski.DatingAppBackend.services.*
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.ArrayList
+import java.util.*
 import javax.servlet.http.HttpServletResponse
+import kotlin.collections.ArrayList
 
 @RestController
 @RequestMapping("profile")
@@ -19,7 +21,8 @@ class ProfileUserController(
     private val dictionaryService: DictionaryService,
     private val orientationService: OrientationService,
     private val hobbyUserService: HobbyUserService,
-    private val interestedRelationshipService: InterestedRelationshipService
+    private val interestedRelationshipService: InterestedRelationshipService,
+    private val imageService: ImageUserService
 ) {
 /*
     @PutMapping("edit")
@@ -321,4 +324,64 @@ class ProfileUserController(
         println(body.listHobby)
     }
 
+    @PutMapping("uploadImage")
+    fun uploadImage(@RequestBody body: ProfileImageDTO, response: HttpServletResponse): ResponseEntity<String> {
+        println("Zmiana opisu")
+        if (this.profileService.profileExistById(body.profileId)) {
+            val profile = this.profileService.getProfileById(body.profileId)
+            val image = ImageUserModel()
+            image.createDate = Date()
+            image.deleteHashImgur=body.deleteHashImgur
+            image.idImgur=body.idImgur
+            image.imageLink=body.linkImgur
+            image.profile=profile
+            this.imageService.save(image)
+
+            //return ResponseEntity.badRequest().body("Dodano zdjęcie\n")
+            return ResponseEntity.ok().body("Dodano zdjęcie\n")
+        } else {
+            println("taki profile nie istnieje")
+            return ResponseEntity.badRequest().body("Nie dodano zdjęcia\n")
+        }
+    }
+
+    @RequestMapping("getProfileImages")
+    fun getProfileImages(@RequestParam(value = "profile") profileId: Int): ArrayList<ProfileImageDTO>? {
+        if (this.profileService.profileExistById(profileId)) {
+            val profile = profileService.getProfileById(profileId)
+            val listProfileImages = imageService.findAllByProfile(profile)
+            if(listProfileImages!=null){
+                val returnListImages = ArrayList<ProfileImageDTO>()
+                for(item in listProfileImages){
+                    val image: ProfileImageDTO = ProfileImageDTO(
+                        profileId,
+                        item.deleteHashImgur,
+                        item.idImgur,
+                        item.imageLink
+                    )
+                    returnListImages.add(image)
+                }
+                return returnListImages
+            }
+        }
+        return null
+    }
+
+    @DeleteMapping("deleteProfileImage")
+    fun deleteImageProfile(@RequestBody body: ProfileImageDTO): ResponseEntity<String> {
+        if (this.profileService.profileExistById(body.profileId)) {
+            val image = imageService.getImageByIdImgur(body.idImgur)
+
+            if (image != null) {
+                imageService.deleteImage(image.id)
+                println("usunieto")
+                return ResponseEntity.ok().body("usunięto zdjęcia\n")
+            } else {
+                println("nie usunieto")
+            }
+        } else {
+            println("nie znaleziono profilu")
+        }
+        return ResponseEntity.badRequest().body("Nie usunięto zdjęcia\n")
+    }
 }
