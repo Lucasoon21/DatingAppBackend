@@ -31,6 +31,8 @@ class UserModel {
     @Column
     var isActive = true
 
+    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+    val profileUser: ProfileModel? = null
 
     fun comparePassword(password: String): Boolean {
         return BCryptPasswordEncoder().matches(password, this.password)

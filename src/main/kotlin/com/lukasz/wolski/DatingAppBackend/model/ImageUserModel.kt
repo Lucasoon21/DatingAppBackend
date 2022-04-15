@@ -1,5 +1,6 @@
 package com.lukasz.wolski.DatingAppBackend.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.util.*
 import javax.persistence.*
 
@@ -26,7 +27,8 @@ class ImageUserModel {
 */
     @ManyToOne
     @JoinColumn(name="profile_id")
-    var profile: ProfileModel = ProfileModel()
+    @JsonIgnore
+    var profile: ProfileModel? = null
     /* WIELE DO JEDNEGO
     * Z PERSON MODEL
     * */

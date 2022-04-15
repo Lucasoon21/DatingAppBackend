@@ -9,4 +9,6 @@ interface ProfileRepository: JpaRepository<ProfileModel, Int> {
     fun getProfileModelById(user: ProfileModel): ProfileModel
     fun getProfileModelByUser(user: UserModel): ProfileModel?
     fun findFirstByUser(user: Int): ProfileModel
+
+    fun findAllByIdNot(id: Int): List<ProfileModel>?
 }

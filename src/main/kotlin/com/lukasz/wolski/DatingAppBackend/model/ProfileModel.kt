@@ -1,5 +1,7 @@
 package com.lukasz.wolski.DatingAppBackend.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import lombok.NoArgsConstructor
 import java.sql.Date
 import javax.persistence.*
@@ -7,26 +9,26 @@ import javax.persistence.*
 
 @NoArgsConstructor
 @Entity(name = "Profile")
-class ProfileModel{
+ class ProfileModel(
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Int = 0
+    var id: Int = 0,
 
     @Column
-    var name: String = ""
+    var name: String = "",
 
     @Column
-    var data_birth: Date = Date(0)
+    var data_birth: Date = Date(0),
 
     @Column(length = 1000)
-    var description: String = ""
+    var description: String = "",
 
     @Column(length = 100)
-    var job: String = ""
+    var job: String = "",
 
     @Column
-    var location: String = ""
+    var location: String = "",
 /*
     @Column
     var id_gender: String = ""
@@ -35,89 +37,66 @@ class ProfileModel{
     var id_orientation: Int = 0
 */
     @Column
-    var height: Int = 0
+    var height: Int = 0,
 
     @Column
-    var weight: Double = 0.0
+    var weight: Double = 0.0,
 
     @ManyToOne
     @JoinColumn(name="d_zodiac")
-    var dictionaryZodiac: DictionaryZodiacModel = DictionaryZodiacModel()
+    var dictionaryZodiac: DictionaryZodiacModel = DictionaryZodiacModel(),
 
     @ManyToOne
     @JoinColumn(name="d_education")
-    var dictionaryEducation: DictionaryEducationModel = DictionaryEducationModel()
+    var dictionaryEducation: DictionaryEducationModel = DictionaryEducationModel(),
 
     @ManyToOne
     @JoinColumn(name="d_religious")
-    var dictionaryReligious: DictionaryReligiousModel = DictionaryReligiousModel()
+    var dictionaryReligious: DictionaryReligiousModel = DictionaryReligiousModel(),
 
     @ManyToOne
     @JoinColumn(name="d_children")
-    var dictionaryChildren: DictionaryChildrenModel = DictionaryChildrenModel()
+    var dictionaryChildren: DictionaryChildrenModel = DictionaryChildrenModel(),
 
     @ManyToOne
     @JoinColumn(name="d_alcohol")
-    var dictionaryAlcohol: DictionaryAlcoholModel = DictionaryAlcoholModel()
+    var dictionaryAlcohol: DictionaryAlcoholModel = DictionaryAlcoholModel(),
 
     @ManyToOne
     @JoinColumn(name="d_cigarettes")
-    var dictionaryCigarettes: DictionaryCigarettesModel = DictionaryCigarettesModel()
+    var dictionaryCigarettes: DictionaryCigarettesModel = DictionaryCigarettesModel(),
 
     @ManyToOne
     @JoinColumn(name="d_eye_color")
-    var dictionaryEyeColor: DictionaryEyeColorModel = DictionaryEyeColorModel()
+    var dictionaryEyeColor: DictionaryEyeColorModel = DictionaryEyeColorModel(),
 
     @ManyToOne
     @JoinColumn(name="orienatation_id")
-    var dictionaryOrientation: DictionaryOrientationModel = DictionaryOrientationModel()
+    var dictionaryOrientation: DictionaryOrientationModel = DictionaryOrientationModel(),
 
     @ManyToOne
     @JoinColumn(name="gender_id")
-    var dictionaryGender: DictionaryGenderModel = DictionaryGenderModel()
+    var dictionaryGender: DictionaryGenderModel = DictionaryGenderModel(),
 
 
 
     @OneToOne
     @JoinColumn(name="user_id")
-    var user: UserModel = UserModel()
-    //var id_user: Int = 0
+    @JsonIgnore
+    var user: UserModel = UserModel(),
 
-    /* WIELE DO WIELU
-    * Z BLOCK USER MODEL
-    * */
+    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+    val images: List<ImageUserModel>? = emptyList(),
 
-    /* WIELE DO JEDNEGO
-    * Z GENDER MODEL
-    * */
+   @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+   val userHobby: List<HobbyUserModel>? = emptyList(),
 
-    /* WIELE DO JEDNEGO
-    * Z HOBBY USER MODEL
-    * */
+   @OneToOne(mappedBy = "profileId",fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+   val interestedAge: InterestedAgeModel? = null,
 
-    /* WIELE DO JEDNEGO
-    * Z IMAGE MODEL
-    * */
+   @OneToOne(mappedBy = "profileId",fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+   val interestedHeight: InterestedHeightModel? = null,
 
-    /* WIELE DO JEDNEGO
-    * Z INTERESTED AGE MODEL
-    * */
-
-    /* WIELE DO JEDNEGO
-    * Z INTERESTED GENDER MODEL
-    * */
-
-    /* WIELE DO JEDNEGO
-    * Z INTERESTED HOBBY MODEL
-    * */
-
-    /* WIELE DO JEDNEGO
-    * Z INTERESTED RELATIONSHIP MODEL
-    * */
-
-    /* WIELE DO JEDNEGO
-    * Z ORIENTATION MODEL
-    * */
-
-
-}
+   @OneToOne(mappedBy = "profileId",fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+   val interestedWeight: InterestedWeightModel? = null
+)
