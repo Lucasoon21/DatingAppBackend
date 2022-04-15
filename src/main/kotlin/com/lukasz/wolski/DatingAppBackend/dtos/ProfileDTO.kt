@@ -19,5 +19,5 @@ data class ProfileDTO(
     var cigarettes: DictionaryCigarettesModel,
     var eyeColor: DictionaryEyeColorModel,
     var zodiac: DictionaryZodiacModel,
-
+    var age: Int,
     )

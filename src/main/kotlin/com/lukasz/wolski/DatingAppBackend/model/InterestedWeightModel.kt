@@ -1,5 +1,6 @@
 package com.lukasz.wolski.DatingAppBackend.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 @Entity(name="Interested_weight")
 class InterestedWeightModel {
@@ -21,5 +22,6 @@ class InterestedWeightModel {
     * */
     @OneToOne
     @JoinColumn(name="profile_id")
+    @JsonIgnore
     var profileId: ProfileModel = ProfileModel()
 }

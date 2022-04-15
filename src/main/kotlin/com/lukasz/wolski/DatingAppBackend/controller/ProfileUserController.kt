@@ -6,6 +6,8 @@ import com.lukasz.wolski.DatingAppBackend.model.HobbyUserModel
 import com.lukasz.wolski.DatingAppBackend.model.ImageUserModel
 import com.lukasz.wolski.DatingAppBackend.model.InterestedRelationshipModel
 import com.lukasz.wolski.DatingAppBackend.services.*
+import org.joda.time.LocalDate
+import org.joda.time.Years
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -24,112 +26,8 @@ class ProfileUserController(
     private val interestedRelationshipService: InterestedRelationshipService,
     private val imageService: ImageUserService
 ) {
-/*
-    @PutMapping("edit")
-    fun editProfile(@RequestBody body: ProfileDTO, response: HttpServletResponse) {
-        println("edycja profilu")
-        if (this.profileService.profileExistById(body.profileId)) {
-            if (this.genderService.genderExistById(body.genderId) && this.orientationService.orientationExistsById(body.orientationId)) {
-                val gender = this.genderService.getGender(body.genderId)
-                val orientation = this.orientationService.getOrientation(body.orientationId)
-                val oldProfile = this.profileService.getProfileById(body.profileId)
-                if (gender != null) {
-                    oldProfile.dictionaryGender = gender
-                }
-                if (orientation != null) {
-                    oldProfile.dictionaryOrientation = orientation
-                }
-                oldProfile.description = body.description
-                this.profileService.save(oldProfile)
-            } else {
-                println("Nie istnieje płeć lub orientacja")
-            }
-        } else {
-            println("taki profile nie istnieje")
-        }
-    }
-*/
 
 
-
-    @RequestMapping("getProfileHobby")
-    fun getProfileHobby(@RequestParam(value = "profile") profileId: Int): ArrayList<HobbyUserDTO>? {
-        if (this.profileService.profileExistById(profileId)) {
-            val listHobby = dictionaryService.getAllHobbyDictionary()
-            val profile = this.profileService.getProfileById(profileId)
-            val hobbyUser  = this.hobbyUserService.getAllHobbyByProfile(profile)
-            println(hobbyUser.size)
-           // val returnListHobby: ArrayList<HobbyUserDTO> = emptyList<HobbyUserDTO>() as ArrayList<HobbyUserDTO>
-            val returnListHobby = ArrayList<HobbyUserDTO>()
-            if(listHobby!=null){
-                for(item in listHobby){
-                    val hobby: HobbyUserDTO = HobbyUserDTO(
-                        profileId,
-                        item.id,
-                        0,
-                        item.name
-                    )
-                    returnListHobby.add(hobby)
-                }
-                for(item in hobbyUser){
-                    println("item")
-                    val e = returnListHobby.indexOfFirst { it.hobbyId == item.hobby.id }
-                    println("e = "+e)
-                    println("return = "+returnListHobby[e].decision)
-                    println("return = "+item.decison)
-
-                    returnListHobby[e].decision = item.decison
-                }
-                return returnListHobby
-            }
-            else {
-                println("Użytkownik nie ma wybranego hobby")
-            }
-
-
-        } else {
-            println("Nie znaleziono")
-        }
-        return null;
-    }
-
-
-    @PutMapping("getProfileDetails")
-    fun getProfileDetails(@RequestBody body: GetProfileDTO, response: HttpServletResponse): ResponseEntity<ProfileDTO> {
-        println("Szczegóły profilu"+body.profileId)
-        if (this.profileService.profileExistById(body.profileId)) {
-            val oldProfile = this.profileService.getProfileById(body.profileId)
-            if(oldProfile!=null) {
-                val responseProfile:ProfileDTO = ProfileDTO(
-                    oldProfile.name,
-                    oldProfile.dictionaryGender,
-                    oldProfile.dictionaryOrientation,
-                    oldProfile.description,
-                    oldProfile.location,
-                    oldProfile.dictionaryAlcohol,
-                    oldProfile.job,
-                    oldProfile.height,
-                    oldProfile.weight,
-                    oldProfile.dictionaryEducation,
-                    oldProfile.dictionaryReligious,
-                    oldProfile.dictionaryChildren,
-                    oldProfile.dictionaryCigarettes,
-                    oldProfile.dictionaryEyeColor,
-                    oldProfile.dictionaryZodiac
-                )
-
-
-                ObjectMapper().writeValue(response.outputStream, responseProfile)
-                return ResponseEntity.ok().body(responseProfile)
-            } else {
-                return ResponseEntity.ok().body(null)
-            }
-
-        } else {
-            println("taki profile nie istnieje")
-            return ResponseEntity.badRequest().body(null)
-        }
-    }
 
     @PutMapping("changeDescription")
     fun changeDescription(@RequestBody body: ChangeDescriptionDTO, response: HttpServletResponse): ResponseEntity<String> {
@@ -191,7 +89,6 @@ class ProfileUserController(
             return ResponseEntity.badRequest().body("Nie znaleziono użytkownika\n")
         }
     }
-
 
     @RequestMapping("getProfileRelationship")
     fun getProfileRelationship(@RequestParam(value = "profile") profileId: Int): ArrayList<InterestedRelationshipDTO>? {
@@ -273,6 +170,88 @@ class ProfileUserController(
             println("nie znaleziono uzytkownika")
         }
         println("ddd")
+    }
+
+    @PutMapping("getProfileDetails")
+    fun getProfileDetails(@RequestBody body: GetProfileDTO, response: HttpServletResponse): ResponseEntity<ProfileDTO> {
+        println("Szczegóły profilu"+body.profileId)
+        if (this.profileService.profileExistById(body.profileId)) {
+            val oldProfile = this.profileService.getProfileById(body.profileId)
+
+            //val ageUser: Int = oldProfile.data_birth.
+            val localNow: LocalDate = LocalDate.now()
+            val birthDate: LocalDate = LocalDate.fromDateFields(oldProfile.data_birth)
+            val age: Years = Years.yearsBetween(birthDate, localNow)
+            println("age = $age")
+
+            val responseProfile:ProfileDTO = ProfileDTO(
+                oldProfile.name,
+                oldProfile.dictionaryGender,
+                oldProfile.dictionaryOrientation,
+                oldProfile.description,
+                oldProfile.location,
+                oldProfile.dictionaryAlcohol,
+                oldProfile.job,
+                oldProfile.height,
+                oldProfile.weight,
+                oldProfile.dictionaryEducation,
+                oldProfile.dictionaryReligious,
+                oldProfile.dictionaryChildren,
+                oldProfile.dictionaryCigarettes,
+                oldProfile.dictionaryEyeColor,
+                oldProfile.dictionaryZodiac,
+                age.years,
+            )
+
+
+            ObjectMapper().writeValue(response.outputStream, responseProfile)
+            return ResponseEntity.ok().body(responseProfile)
+
+        } else {
+            println("taki profile nie istnieje")
+            return ResponseEntity.badRequest().body(null)
+        }
+    }
+
+    @RequestMapping("getProfileHobby")
+    fun getProfileHobby(@RequestParam(value = "profile") profileId: Int): ArrayList<HobbyUserDTO>? {
+        if (this.profileService.profileExistById(profileId)) {
+            val listHobby = dictionaryService.getAllHobbyDictionary()
+            val profile = this.profileService.getProfileById(profileId)
+            val hobbyUser  = this.hobbyUserService.getAllHobbyByProfile(profile)
+            println(hobbyUser.size)
+            // val returnListHobby: ArrayList<HobbyUserDTO> = emptyList<HobbyUserDTO>() as ArrayList<HobbyUserDTO>
+            val returnListHobby = ArrayList<HobbyUserDTO>()
+            if(listHobby!=null){
+                for(item in listHobby){
+                    val hobby: HobbyUserDTO = HobbyUserDTO(
+                        profileId,
+                        item.id,
+                        0,
+                        item.name
+                    )
+                    returnListHobby.add(hobby)
+                }
+                for(item in hobbyUser){
+                    println("item")
+                    val e = returnListHobby.indexOfFirst { it.hobbyId == item.hobby.id }
+                    println("e = "+e)
+                    println("return = "+returnListHobby[e].decision)
+                    println("return = "+item.decison)
+
+                    returnListHobby[e].decision = item.decison
+                }
+                return returnListHobby
+            }
+            else {
+                println("Użytkownik nie ma wybranego hobby")
+            }
+
+
+        } else {
+            println("Nie znaleziono")
+        }
+        return null;
     }
 
     @PutMapping("changeProfileHobby")
