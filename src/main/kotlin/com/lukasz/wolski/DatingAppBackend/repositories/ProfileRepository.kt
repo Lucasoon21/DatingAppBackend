@@ -9,6 +9,7 @@ interface ProfileRepository: JpaRepository<ProfileModel, Int> {
     fun getProfileModelById(user: ProfileModel): ProfileModel
     fun getProfileModelByUser(user: UserModel): ProfileModel?
     fun findFirstByUser(user: Int): ProfileModel
+    //fun findAllByIdNotAndAndHeightBetween(id: Int, heightFrom:Int, heightTo:Int): List<ProfileModel>?
 
-    fun findAllByIdNot(id: Int): List<ProfileModel>?
+    fun findAllByIdNotAndAndHeightBetweenAndWeightBetween(id: Int, heightFrom:Int, heightTo:Int, weightFrom:Int, weightTo:Int): List<ProfileModel>?
 }

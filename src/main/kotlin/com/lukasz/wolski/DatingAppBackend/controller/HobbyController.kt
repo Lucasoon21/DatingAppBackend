@@ -71,7 +71,7 @@ class HobbyController(private val profileService: ProfileService,
                 val hobby = this.hobbyService.getHobbyById(body.hobbyId)
                 val checkHobbyUser = this.hobbyUserService.hobbyInterestedExists(profile,hobby)
                 if(checkHobbyUser.isEmpty()){
-                    println("nie istnieje taki rekord")
+
                     val userHobby = HobbyUserModel()
                     userHobby.decison = body.decision
                     userHobby.profile = profile
@@ -94,7 +94,7 @@ class HobbyController(private val profileService: ProfileService,
 
     @PutMapping("editUserHobby")
     fun editHobbyuser(@RequestBody body: HobbyUserDTO, response: HttpServletResponse) {
-        println("edycja ")
+
         if (this.profileService.profileExistById(body.profileId)) {
             if(this.hobbyService.hobbyExistById(body.hobbyId)){
                 val profile = this.profileService.getProfileById(body.profileId)

@@ -13,7 +13,7 @@ class ImageUserService(private val imageUserRepository: ImageUserRepository) {
         return this.imageUserRepository.save(imageUser)
     }
     fun findAllByProfile(profile: ProfileModel): List<ImageUserModel>? {
-        return this.imageUserRepository.findAllByProfile(profile)
+        return this.imageUserRepository.findAllByProfileOrderByMainPictureDesc(profile)
     }
     fun deleteImage(image: Int) {
         return this.imageUserRepository.deleteById(image)
@@ -22,4 +22,15 @@ class ImageUserService(private val imageUserRepository: ImageUserRepository) {
     fun getImageByIdImgur(idImgur: String): ImageUserModel? {
         return this.imageUserRepository.getByIdImgur(idImgur)
     }
+
+    fun getMainPhoto(profile: ProfileModel): ImageUserModel? {
+        return this.imageUserRepository.findFirstByProfileAndMainPictureTrue(profile)
+    }
+    fun getAllMainPhoto(profile: ProfileModel): List<ImageUserModel>? {
+        return this.imageUserRepository.findAllByProfileAndMainPictureTrue(profile)
+    }
+    fun setNewPhotoProfileAfterDelete(profile: ProfileModel): ImageUserModel? {
+        return this.imageUserRepository.findFirstByProfileAndMainPictureFalse(profile)
+    }
+
 }

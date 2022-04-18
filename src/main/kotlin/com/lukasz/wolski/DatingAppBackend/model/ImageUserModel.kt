@@ -21,6 +21,9 @@ class ImageUserModel {
 
     @Column
     var createDate: Date = Date()
+
+    @Column
+    var mainPicture: Boolean = false
 /*
     @Column
     var id_user: Int = 0

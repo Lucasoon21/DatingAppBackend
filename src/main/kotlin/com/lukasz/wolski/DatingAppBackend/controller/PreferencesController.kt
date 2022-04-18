@@ -25,7 +25,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
 
     @RequestMapping("getAgePreferences")
     fun getAgePreferences(@RequestParam(value = "profile") profileId: Int): InterestedAgeDTO? {
-       println("aa= "+profileId)
+
         if (this.profileService.profileExistById(profileId)) {
             val profile = profileService.getProfileById(profileId)
             val age = interestedAgeService.getInterestedAgeByProfileId(profile)
@@ -53,7 +53,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
 
     @PutMapping("changeAgePreferences")
     fun editAgePreferences(@RequestBody body: InterestedAgeDTO, response: HttpServletResponse) {
-        println("edycja wieku")
+
         if (this.profileService.profileExistById(body.profileId)) {
             if(body.ageFrom<body.ageTo && body.ageFrom>18 && body.ageTo<100) {
                 val profile = this.profileService.getProfileById(body.profileId)
@@ -87,7 +87,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
             val listHobby = dictionaryService.getAllHobbyDictionary()
             val profile = this.profileService.getProfileById(profileId)
             val hobbyUserPreferences  = this.interestedHobbyService.getAllInterestedHobbyByProfile(profile)
-            println(hobbyUserPreferences.size)
+
             // val returnListHobby: ArrayList<HobbyUserDTO> = emptyList<HobbyUserDTO>() as ArrayList<HobbyUserDTO>
             val returnListHobby = ArrayList<HobbyUserDTO>()
             if(listHobby!=null){
@@ -101,12 +101,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
                     returnListHobby.add(hobby)
                 }
                 for(item in hobbyUserPreferences){
-                    println("item")
                     val e = returnListHobby.indexOfFirst { it.hobbyId == item.hobby.id }
-                    println("e = "+e)
-                    println("return = "+returnListHobby[e].decision)
-                    println("return = "+item.decison)
-
                     returnListHobby[e].decision = item.decison
                 }
                 return returnListHobby
@@ -165,7 +160,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
 
     @RequestMapping("getHeightPreferences")
     fun getHeightPreferences(@RequestParam(value = "profile") profileId: Int): InterestedHeightDTO? {
-        println("aa= "+profileId)
+
         if (this.profileService.profileExistById(profileId)) {
             val profile = profileService.getProfileById(profileId)
             val height = interestedHeightService.getInterestedHeightByProfileId(profile)
@@ -193,9 +188,9 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
 
     @PutMapping("changeHeightPreferences")
     fun editHeightPreferences(@RequestBody body: InterestedHeightDTO, response: HttpServletResponse) {
-        println("edycja wieku")
+
         if (this.profileService.profileExistById(body.profileId)) {
-            if(body.heightFrom<body.heightTo && body.heightFrom>100 && body.heightTo<200) {
+            if(body.heightFrom<body.heightTo && body.heightFrom>=100 && body.heightTo<200) {
                 val profile = this.profileService.getProfileById(body.profileId)
                 var oldHeightPreferences = this.interestedHeightService.getInterestedHeightByProfileId(profile)
                 if(oldHeightPreferences!=null) {
@@ -211,7 +206,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
                 }
 
             } else {
-                println("Błędny wiek ")
+                println("Błędny wzrost ")
             }
         } else {
             println("taki profil nie istnieje")
@@ -225,7 +220,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
 
     @RequestMapping("getWeightPreferences")
     fun getWeightPreferences(@RequestParam(value = "profile") profileId: Int): InterestedWeightDTO? {
-        println("aa= "+profileId)
+
         if (this.profileService.profileExistById(profileId)) {
             val profile = profileService.getProfileById(profileId)
             val weight = interestedWeightService.getInterestedWeightByProfile(profile)
@@ -253,9 +248,10 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
 
     @PutMapping("changeWeightPreferences")
     fun editWeightPreferences(@RequestBody body: InterestedWeightDTO, response: HttpServletResponse) {
-        println("edycja wieku")
+
+
         if (this.profileService.profileExistById(body.profileId)) {
-            if(body.weightFrom<body.weightTo && body.weightFrom>30 && body.weightTo<200) {
+            if(body.weightFrom<body.weightTo && body.weightFrom>=30 && body.weightTo<=200) {
                 val profile = this.profileService.getProfileById(body.profileId)
                 var oldWeightPreferences = this.interestedWeightService.getInterestedWeightByProfile(profile)
                 if(oldWeightPreferences!=null) {
@@ -271,7 +267,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
                 }
 
             } else {
-                println("Błędny wiek ")
+                println("Błędna waga ")
             }
         } else {
             println("taki profil nie istnieje")

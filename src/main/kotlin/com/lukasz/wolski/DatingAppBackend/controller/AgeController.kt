@@ -22,7 +22,7 @@ class AgeController(private val interestedAgeService: InterestedAgeService,
         if(this.profileService.profileExistById(body.profileId)){
             val profile = this.profileService.getProfileById(body.profileId)
             if(body.ageFrom<body.ageTo && body.ageFrom>18 && body.ageTo<100) {
-                println("Wiek prawidlowy")
+
                 val checkAgePreferences = interestedAgeService.profileExist(profile)
                 if(checkAgePreferences.isEmpty()){
                     val agePreferencesModel = InterestedAgeModel()
@@ -49,7 +49,6 @@ class AgeController(private val interestedAgeService: InterestedAgeService,
 
     @PutMapping("edit")
     fun editAgePreferences(@RequestBody body: InterestedAgeDTO, response: HttpServletResponse) {
-        println("edycja wieku")
         if (this.profileService.profileExistById(body.profileId)) {
             if(body.ageFrom<body.ageTo && body.ageFrom>18 && body.ageTo<100) {
                 var profile = this.profileService.getProfileById(body.profileId)

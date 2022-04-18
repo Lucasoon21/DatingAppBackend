@@ -45,7 +45,7 @@ class GenderController(private val profileService: ProfileService,
 
     @PutMapping("edit")
     fun editGenderPreferences(@RequestBody body: InterestedGenderDTO, response: HttpServletResponse) {
-        println("edycja płci")
+
         if (this.profileService.profileExistById(body.profileId)) {
             if(this.genderService.genderExistById(body.genderId)){
 
