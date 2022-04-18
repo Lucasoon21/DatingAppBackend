@@ -5,7 +5,7 @@ data class ChangeProfileDetailsDTO(
     var alcoholId: Int,
     var job: String,
     var height: Int,
-    var weight: Double,
+    var weight: Int,
     var orientationId: Int,
     var educationId: Int,
     var religiousId: Int,

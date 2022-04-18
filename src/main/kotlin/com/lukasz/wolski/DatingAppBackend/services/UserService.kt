@@ -9,6 +9,7 @@ class UserService(private val userRepository: UserRepository) {
     fun emailExists(email: String): Boolean {
         return this.userRepository.findByEmail(email) != null
     //true jesli istnieje
+        //TODO - sprawdzić bo może być zawsze 0 lub wiecej - przyklad checkMatch
     }
 
     fun findIdByEmail(email: String): Int {

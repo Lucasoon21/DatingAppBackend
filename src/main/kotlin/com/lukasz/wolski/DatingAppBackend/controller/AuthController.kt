@@ -41,28 +41,26 @@ class AuthController(private val userService: UserService,
         user.isActive = true
 
         if(this.userService.emailExists(user.email)!=true){
-            println("email nie istnieje")
+
             this.userService.save(user)
             return response.setStatus(HttpServletResponse.SC_ACCEPTED)
         }
         else{
-            println("email istnieje")
+
             return  response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE)
         }
     }
 
     @PostMapping("registerDetails")
     fun registerDetails(@RequestBody body: RegisterDetailsDTO, response: HttpServletResponse) {
-        println("rejestracja detale")
+
         println(body.orientation)
         val profile = ProfileModel()
-        profile.data_birth = body.dateBirth
+        profile.date_birth = body.dateBirth
         profile.name = body.name
 
         val user = userService.getUser(body.email)
         val gender = genderService.getGender(body.gender)
-        println("body "+body.gender)
-        println("wynik "+gender)
 //        val gender = genderService.getGender(body.gender)
         val orientation = orientationService.getOrientation(body.orientation)
         if(user != null){
@@ -108,7 +106,7 @@ class AuthController(private val userService: UserService,
 
         val userId = this.userService.findIdByEmail(body.email)
         val userProfile = userService.getUser(body.email)
-        println("user profil")
+
 
         if (userProfile != null) {
             println(userProfile.id)

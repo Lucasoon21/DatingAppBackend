@@ -9,4 +9,6 @@ interface SwipeRepository: JpaRepository<SwipeDecisionModel, Int> {
 
     fun findFirstSwipeDecisionModelByUserGivenAndUserReceiver(profileId: ProfileModel, profileIdSwipe: ProfileModel) : SwipeDecisionModel
 
+    fun findAllByDecisionAndUserGivenAndUserReceiver(decision: Int, profileGiven: ProfileModel, profileReceiver: ProfileModel) : List<SwipeDecisionModel>
+
 }

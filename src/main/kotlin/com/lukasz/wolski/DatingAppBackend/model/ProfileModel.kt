@@ -11,24 +11,24 @@ import javax.persistence.*
 @Entity(name = "Profile")
  class ProfileModel(
 
-    @Id
+   @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Int = 0,
 
-    @Column
+   @Column
     var name: String = "",
 
-    @Column
-    var data_birth: Date = Date(0),
+   @Column
+    var date_birth: Date? = Date(0),
 
-    @Column(length = 1000)
-    var description: String = "",
+   @Column(length = 1000)
+    var description: String? = "",
 
-    @Column(length = 100)
-    var job: String = "",
+   @Column(length = 100)
+    var job: String? = "",
 
-    @Column
-    var location: String = "",
+   @Column
+    var location: String? = "",
 /*
     @Column
     var id_gender: String = ""
@@ -37,55 +37,55 @@ import javax.persistence.*
     var id_orientation: Int = 0
 */
     @Column
-    var height: Int = 0,
+    var height: Int? = 0,
 
-    @Column
-    var weight: Double = 0.0,
+   @Column
+    var weight: Int? = 0,
 
-    @ManyToOne
+   @ManyToOne
     @JoinColumn(name="d_zodiac")
-    var dictionaryZodiac: DictionaryZodiacModel = DictionaryZodiacModel(),
+    var dictionaryZodiac: DictionaryZodiacModel? = DictionaryZodiacModel(),
 
-    @ManyToOne
+   @ManyToOne
     @JoinColumn(name="d_education")
-    var dictionaryEducation: DictionaryEducationModel = DictionaryEducationModel(),
+    var dictionaryEducation: DictionaryEducationModel? = DictionaryEducationModel(),
 
-    @ManyToOne
+   @ManyToOne
     @JoinColumn(name="d_religious")
-    var dictionaryReligious: DictionaryReligiousModel = DictionaryReligiousModel(),
+    var dictionaryReligious: DictionaryReligiousModel? = DictionaryReligiousModel(),
 
-    @ManyToOne
+   @ManyToOne
     @JoinColumn(name="d_children")
-    var dictionaryChildren: DictionaryChildrenModel = DictionaryChildrenModel(),
+    var dictionaryChildren: DictionaryChildrenModel? = DictionaryChildrenModel(),
 
-    @ManyToOne
+   @ManyToOne
     @JoinColumn(name="d_alcohol")
-    var dictionaryAlcohol: DictionaryAlcoholModel = DictionaryAlcoholModel(),
+    var dictionaryAlcohol: DictionaryAlcoholModel? = DictionaryAlcoholModel(),
 
-    @ManyToOne
+   @ManyToOne
     @JoinColumn(name="d_cigarettes")
-    var dictionaryCigarettes: DictionaryCigarettesModel = DictionaryCigarettesModel(),
+    var dictionaryCigarettes: DictionaryCigarettesModel? = DictionaryCigarettesModel(),
 
-    @ManyToOne
+   @ManyToOne
     @JoinColumn(name="d_eye_color")
-    var dictionaryEyeColor: DictionaryEyeColorModel = DictionaryEyeColorModel(),
+    var dictionaryEyeColor: DictionaryEyeColorModel? = DictionaryEyeColorModel(),
 
-    @ManyToOne
+   @ManyToOne
     @JoinColumn(name="orienatation_id")
-    var dictionaryOrientation: DictionaryOrientationModel = DictionaryOrientationModel(),
+    var dictionaryOrientation: DictionaryOrientationModel?= DictionaryOrientationModel(),
 
-    @ManyToOne
+   @ManyToOne
     @JoinColumn(name="gender_id")
-    var dictionaryGender: DictionaryGenderModel = DictionaryGenderModel(),
+    var dictionaryGender: DictionaryGenderModel? = DictionaryGenderModel(),
 
 
 
-    @OneToOne
+   @OneToOne
     @JoinColumn(name="user_id")
     @JsonIgnore
     var user: UserModel = UserModel(),
 
-    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+   @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
     val images: List<ImageUserModel>? = emptyList(),
 
    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))

@@ -22,7 +22,7 @@ class RelationshipController(private val profileService: ProfileService,
                 val relationship = this.relationshipService.getRelationshipById(body.relationshipId)
                 val checkRelationshipPreferences = this.interestedRelationshipService.relationshipPreferencesExists(profile,relationship)
                 if(checkRelationshipPreferences.isEmpty()){
-                    println("nie istnieje taki rekord")
+
                     val interestedRelationship = InterestedRelationshipModel()
                     interestedRelationship.decison = body.decision
                     interestedRelationship.profile = profile

@@ -7,4 +7,5 @@ data class ProfileImageDTO(
     val deleteHashImgur: String,
     val idImgur: String,
     val linkImgur: String,
+    val isMainPhoto: Boolean,
 )
