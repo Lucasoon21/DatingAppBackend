@@ -25,19 +25,35 @@ class SwipeDecisionService(private val swipeRepository: SwipeRepository,
         ).isNotEmpty()
     }
 
-    fun getAllProfiles(profile: ProfileModel): List<ProfileModel>? {
-        println(profile.interestedWeight?.weight_from ?: 100)
-        println(profile.interestedWeight?.weight_to ?: 200)
-        return this.profileRepository.findAllByIdNotAndAndHeightBetweenAndWeightBetween(
-            profile.id,
+    fun getAllLiked(profile: ProfileModel): ArrayList<SwipeDecisionModel> {
+        return this.swipeRepository.findAllByUserGiven(profile)
+    }
+
+    fun getAllProfiles(
+        profile: ProfileModel,
+        allLikesProfiles: ArrayList<Int>,
+        genderPreferencesUser: ArrayList<DictionaryGenderModel>
+    ): List<ProfileModel>? {
+
+        return this.profileRepository.findAllByIdNotInAndHeightBetweenAndWeightBetweenAndDictionaryGenderIn(
+            allLikesProfiles,
             profile.interestedHeight?.height_from ?: 100,
             profile.interestedHeight?.height_to?: 250,
             profile.interestedWeight?.weight_from ?: 30,
-            profile.interestedWeight?.weight_to?: 250
+            profile.interestedWeight?.weight_to?: 250,
+            genderPreferencesUser
+
         )
         // return this.profileRepository.findAllByIdNotAndAndHeightBetween(profile.id, profile.interestedHeight?.height_from ?: 100, profile.interestedHeight?.height_to?: 250)
 
     }
+
+    fun getAllLikeMe(profile: ProfileModel, myLike: ArrayList<ProfileModel>): List<SwipeDecisionModel>? {
+
+        return this.swipeRepository.findAllByUserReceiverAndDecisionIsAndUserGivenNotIn(profile, 1, myLike)
+    }
+
+
 
 
 }

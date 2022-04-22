@@ -11,6 +11,7 @@ import org.joda.time.Years
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
+import java.util.regex.Pattern
 import javax.servlet.http.HttpServletResponse
 import kotlin.collections.ArrayList
 
@@ -26,6 +27,108 @@ class ProfileUserController(
     private val interestedRelationshipService: InterestedRelationshipService,
     private val imageService: ImageUserService
 ) {
+
+    val PASSWORD_PATTERH: Pattern = Pattern.compile("^((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W]).{6,20})$")
+
+    fun isValidPassword(str: String): Boolean{
+        return PASSWORD_PATTERH.matcher(str).matches()
+    }
+
+    @PutMapping("changePassword")
+    fun changePassword(@RequestBody body: ChangePasswordDTO, response: HttpServletResponse): ResponseEntity<String> {
+        if (this.profileService.profileExistById(body.profileId)) {
+            val profile = this.profileService.getProfileById(body.profileId)
+            val user = userService.getById(profile.user.id)
+            if(user!=null) {
+                if (!user.comparePassword(body.oldPassword)) {
+                    println("Złe hasło")
+                    return ResponseEntity.badRequest().body("Złe hasło")
+
+                }
+                if(isValidPassword(body.newConfirmPassword) && isValidPassword(body.newPassword) &&
+                        body.newPassword==body.newPassword) {
+                    println("ZMiana hasła")
+                    user.password = body.newPassword
+                    userService.save(user)
+                    return ResponseEntity.ok().body("Zmieniono hasło")
+
+                } else {
+                    println("Nie spełnia wymagań")
+                    return ResponseEntity.badRequest().body("Hasła są różne lub nie spełnia wymagań")
+                }
+
+            } else {
+                println("Nie znaleziono użytkownika")
+            }
+        }
+        println("Błąd")
+        return ResponseEntity.badRequest().body("Bład")
+    }
+
+
+    @PutMapping("deactivateAccount")
+    fun deactivateAccount(@RequestParam(value = "profile") profileId: Int, response: HttpServletResponse): ResponseEntity<String> {
+        if (this.profileService.profileExistById(profileId)) {
+            val profile = this.profileService.getProfileById(profileId)
+            profile.isActive=false
+            profileService.save(profile)
+
+
+
+            val user = userService.getById(profile.user.id)
+            if (user != null) {
+                user.isActive=false
+                userService.save(user)
+                return ResponseEntity.ok().body("Deaktywowano konto")
+            } else {
+                return ResponseEntity.badRequest().body("Bład")
+            }
+        }
+        println("Błąd")
+        return ResponseEntity.badRequest().body("Bład")
+    }
+
+    @DeleteMapping("deleteAccount")
+    fun deleteAccount(@RequestParam(value = "profile") profileId: Int, response: HttpServletResponse): ResponseEntity<String>  {
+        if (this.profileService.profileExistById(profileId)) {
+            val profile = profileService.getProfileById(profileId)
+            profileService.deleteAccount(profile.id)
+            val user = userService.getById(profile.user.id)
+            if (user != null) {
+                userService.deleteAccount(user.id)
+            }
+
+                return ResponseEntity.ok().body("usunięto konot\n")
+
+        } else {
+            println("nie znaleziono konta")
+        }
+        return ResponseEntity.badRequest().body("Nie usunięto konta\n")
+    }
+
+
+    @PutMapping("activateAccount")
+    fun activateAccount(@RequestParam(value = "profile") profileId: Int, response: HttpServletResponse): ResponseEntity<String> {
+        if (this.profileService.profileExistById(profileId)) {
+            val profile = this.profileService.getProfileById(profileId)
+            profile.isActive=true
+            profileService.save(profile)
+            val user = userService.getById(profile.user.id)
+            if (user != null) {
+                user.isActive=true
+                userService.save(user)
+                return ResponseEntity.ok().body("aktywowano konto")
+            } else {
+                return ResponseEntity.badRequest().body("Bład")
+            }
+        }
+        println("Błąd")
+        return ResponseEntity.badRequest().body("Bład")
+    }
+
+
+
+
 
 
 
@@ -292,12 +395,16 @@ class ProfileUserController(
 
         if (this.profileService.profileExistById(body.profileId)) {
             val profile = this.profileService.getProfileById(body.profileId)
+            val imagesProfile = this.imageService.getAllMainPhoto(profile)
+            println(imagesProfile)
             val image = ImageUserModel()
             image.createDate = Date()
             image.deleteHashImgur=body.deleteHashImgur
             image.idImgur=body.idImgur
             image.imageLink=body.linkImgur
             image.profile=profile
+            image.mainPicture = imagesProfile?.isEmpty() ?: true
+
             this.imageService.save(image)
 
             //return ResponseEntity.badRequest().body("Dodano zdjęcie\n")

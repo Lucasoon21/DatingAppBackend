@@ -23,6 +23,11 @@ class MatchService(private val profileRepository: ProfileRepository,
     fun getAllMatch(profile: ProfileModel): List<MatchModel>? {
         return this.matchRepository.findAllByProfileFirstOrProfileSecond(profile,profile)
     }
-
+    fun getMatch(profileFirst: ProfileModel, profileSecond: ProfileModel): MatchModel? {
+        return this.matchRepository.findFirstByProfileFirstAndProfileSecond(profileFirst,profileSecond)
+    }
+    fun deleteMatch(id: Int) {
+        return this.matchRepository.deleteById(id)
+    }
 
 }

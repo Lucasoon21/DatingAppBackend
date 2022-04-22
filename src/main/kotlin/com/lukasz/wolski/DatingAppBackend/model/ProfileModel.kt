@@ -9,7 +9,7 @@ import javax.persistence.*
 
 @NoArgsConstructor
 @Entity(name = "Profile")
- class ProfileModel(
+ data class ProfileModel(
 
    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,6 +17,9 @@ import javax.persistence.*
 
    @Column
     var name: String = "",
+
+   @Column
+   var isActive: Boolean? = true,
 
    @Column
     var date_birth: Date? = Date(0),
@@ -42,45 +45,45 @@ import javax.persistence.*
    @Column
     var weight: Int? = 0,
 
-   @ManyToOne
-    @JoinColumn(name="d_zodiac")
-    var dictionaryZodiac: DictionaryZodiacModel? = DictionaryZodiacModel(),
+   @ManyToOne(fetch=FetchType.LAZY)
+   @JoinColumn(name="d_zodiac", nullable = true)
+    var dictionaryZodiac: DictionaryZodiacModel? = null,
 
-   @ManyToOne
-    @JoinColumn(name="d_education")
-    var dictionaryEducation: DictionaryEducationModel? = DictionaryEducationModel(),
+   @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="d_education", nullable = true)
+    var dictionaryEducation: DictionaryEducationModel? = null,
 
-   @ManyToOne
-    @JoinColumn(name="d_religious")
-    var dictionaryReligious: DictionaryReligiousModel? = DictionaryReligiousModel(),
+   @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="d_religious", nullable = true)
+    var dictionaryReligious: DictionaryReligiousModel? = null,
 
-   @ManyToOne
-    @JoinColumn(name="d_children")
-    var dictionaryChildren: DictionaryChildrenModel? = DictionaryChildrenModel(),
+   @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="d_children", nullable = true)
+    var dictionaryChildren: DictionaryChildrenModel? = null,
 
-   @ManyToOne
-    @JoinColumn(name="d_alcohol")
-    var dictionaryAlcohol: DictionaryAlcoholModel? = DictionaryAlcoholModel(),
+   @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="d_alcohol", nullable = true)
+    var dictionaryAlcohol: DictionaryAlcoholModel? = null,
 
-   @ManyToOne
-    @JoinColumn(name="d_cigarettes")
-    var dictionaryCigarettes: DictionaryCigarettesModel? = DictionaryCigarettesModel(),
+   @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="d_cigarettes", nullable = true)
+    var dictionaryCigarettes: DictionaryCigarettesModel? = null,
 
-   @ManyToOne
-    @JoinColumn(name="d_eye_color")
-    var dictionaryEyeColor: DictionaryEyeColorModel? = DictionaryEyeColorModel(),
+   @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="d_eye_color", nullable = true)
+    var dictionaryEyeColor: DictionaryEyeColorModel? = null,
 
-   @ManyToOne
-    @JoinColumn(name="orienatation_id")
-    var dictionaryOrientation: DictionaryOrientationModel?= DictionaryOrientationModel(),
+   @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="orienatation_id", nullable = true)
+    var dictionaryOrientation: DictionaryOrientationModel?= null,
 
-   @ManyToOne
-    @JoinColumn(name="gender_id")
-    var dictionaryGender: DictionaryGenderModel? = DictionaryGenderModel(),
+   @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="gender_id", nullable = true)
+    var dictionaryGender: DictionaryGenderModel? = null,
 
 
 
-   @OneToOne
+    @OneToOne
     @JoinColumn(name="user_id")
     @JsonIgnore
     var user: UserModel = UserModel(),
@@ -98,5 +101,27 @@ import javax.persistence.*
    val interestedHeight: InterestedHeightModel? = null,
 
    @OneToOne(mappedBy = "profileId",fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
-   val interestedWeight: InterestedWeightModel? = null
+   val interestedWeight: InterestedWeightModel? = null,
+
+    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+    val interestedGender: List<InterestedGenderModel>? = emptyList(),
+
+   @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+   val interestedHobby: List<InterestedHobbyModel>? = emptyList(),
+
+   @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+   val interestedRelationship: List<InterestedRelationshipModel>? = emptyList(),
+
+   @OneToMany(mappedBy = "userReceiver", fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+   val swipeDecisionReceiver: List<SwipeDecisionModel>? = emptyList(),
+
+   @OneToMany(mappedBy = "userGiven", fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+   val swipeDecisionGiven: List<SwipeDecisionModel>? = emptyList(),
+
+   @OneToMany(mappedBy = "profileFirst", fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+   val profileFirst: List<MatchModel>? = emptyList(),
+
+   @OneToMany(mappedBy = "profileSecond", fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
+   val profileSecond: List<MatchModel>? = emptyList(),
+
 )

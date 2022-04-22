@@ -10,11 +10,11 @@ class MatchModel{
     var id: Int = 0
 
     @ManyToOne
-    @JoinColumn(name="profile_second")
+    @JoinColumn(name="profile_first")
     var profileFirst: ProfileModel = ProfileModel()
 
     @ManyToOne
-    @JoinColumn(name="profile_first")
+    @JoinColumn(name="profile_second")
     var profileSecond: ProfileModel = ProfileModel()
 
     @Column

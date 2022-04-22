@@ -9,6 +9,6 @@ class RegisterDTO {
     val confirmPassword = ""
     val name = ""
     val gender = 0
+    val orientation = 0
     val dateBirth = Date(0)
-
 }

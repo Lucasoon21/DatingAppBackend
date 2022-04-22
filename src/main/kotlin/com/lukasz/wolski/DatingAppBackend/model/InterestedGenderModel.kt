@@ -17,11 +17,11 @@ class InterestedGenderModel {
     /* WIELE DO JEDNEGO
     * Z PERSON MODEL
     * */
-    @ManyToOne
+    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     @JoinColumn(name="profile_id")
     var profile: ProfileModel = ProfileModel()
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name="gender_id")
     var gender: DictionaryGenderModel = DictionaryGenderModel()
 }

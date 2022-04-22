@@ -1,14 +1,13 @@
 package com.lukasz.wolski.DatingAppBackend.controller
 
 import com.lukasz.wolski.DatingAppBackend.dtos.BlockUserDTO
+import com.lukasz.wolski.DatingAppBackend.dtos.NewMatchDTO
 import com.lukasz.wolski.DatingAppBackend.dtos.SwipeDTO
 import com.lukasz.wolski.DatingAppBackend.model.BlockUserModel
 import com.lukasz.wolski.DatingAppBackend.model.MatchModel
+import com.lukasz.wolski.DatingAppBackend.model.ProfileModel
 import com.lukasz.wolski.DatingAppBackend.model.SwipeDecisionModel
-import com.lukasz.wolski.DatingAppBackend.services.BlockUserService
-import com.lukasz.wolski.DatingAppBackend.services.MatchService
-import com.lukasz.wolski.DatingAppBackend.services.ProfileService
-import com.lukasz.wolski.DatingAppBackend.services.SwipeDecisionService
+import com.lukasz.wolski.DatingAppBackend.services.*
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import javax.servlet.http.HttpServletResponse
@@ -16,8 +15,9 @@ import javax.servlet.http.HttpServletResponse
 @RestController
 @RequestMapping("decision")
 class DecisionController(private val profileService: ProfileService,
-                        private val blockUserService: BlockUserService,
+                         private val blockUserService: BlockUserService,
                          private val swipeDecisionService: SwipeDecisionService,
+                         private val imageUserService: ImageUserService,
                          private val matchService: MatchService,
 ) {
 
@@ -47,7 +47,7 @@ class DecisionController(private val profileService: ProfileService,
     }
 
     @PutMapping("swipeUser")
-    fun swipeUser(@RequestBody body: SwipeDTO, response: HttpServletResponse){
+    fun swipeUser(@RequestBody body: SwipeDTO, response: HttpServletResponse): NewMatchDTO? {
 
         if(this.profileService.profileExistById(body.profileId) && this.profileService.profileExistById(body.selectProfileUserId) && body.profileId!=body.selectProfileUserId) {
             val profile = this.profileService.getProfileById(body.profileId)
@@ -78,18 +78,32 @@ class DecisionController(private val profileService: ProfileService,
                         match.profileFirst = profile
                         match.profileSecond = selectProfile
                         this.matchService.save(match)
+                        val matchedProfile: ProfileModel
+                        if(body.profileId==profile.id) {
+                            matchedProfile = selectProfile
+                        } else {
+                            matchedProfile = profile
+                        }
+
+                        val profileImage = imageUserService.getMainPhoto(matchedProfile)
+                        val matchReturn = NewMatchDTO(
+                            matchedProfile.id,
+                            matchedProfile.name,
+                            profileImage
+                        )
+                        return matchReturn
 
                     }
                 }
             }
-            else{
+            else {
                 println("istnieje juz taki rekord")
             }
-            println("istnieja takie profile")
         }
         else {
             println("nie istnieja takie profile")
         }
+        return null
     }
 
     @PutMapping("removePair")

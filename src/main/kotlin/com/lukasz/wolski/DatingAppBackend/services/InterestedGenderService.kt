@@ -12,7 +12,11 @@ class InterestedGenderService(private val interestedGenderRepository: Interested
     fun save(interestedGender: InterestedGenderModel): InterestedGenderModel {
         return this.interestedGenderRepository.save(interestedGender)
     }
-    fun getInterestedGenderByProfileId(idProfile: ProfileModel, idGender: DictionaryGenderModel): InterestedGenderModel {
+    fun getInterestedGenderByProfileId(idProfile: ProfileModel, idGender: DictionaryGenderModel): InterestedGenderModel? {
         return this.interestedGenderRepository.findFirstInterestedGenderModelByProfileAndGender(idProfile, idGender)
     }
+    fun getAllInterestedGenderByProfile(profile: ProfileModel): ArrayList<InterestedGenderModel>? {
+        return this.interestedGenderRepository.findAllInterestedGenderModelByProfileAndDecisionIs(profile, 1)
+    }
+
 }
