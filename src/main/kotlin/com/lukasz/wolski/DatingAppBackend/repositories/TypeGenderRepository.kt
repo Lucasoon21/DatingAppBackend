@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface TypeGenderRepository: JpaRepository<DictionaryGenderModel, Int> {
     fun getAllById(id: Int): DictionaryGenderModel?
 
+
 }

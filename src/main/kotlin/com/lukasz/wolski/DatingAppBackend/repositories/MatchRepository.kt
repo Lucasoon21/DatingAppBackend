@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface MatchRepository: JpaRepository<MatchModel, Int> {
 
     fun findAllByProfileFirstOrProfileSecond(profileFirst: ProfileModel, profileSecond: ProfileModel): List<MatchModel>?
+    fun findFirstByProfileFirstAndProfileSecond(profileFirst: ProfileModel, profileSecond: ProfileModel): MatchModel?
 }

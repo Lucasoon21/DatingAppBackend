@@ -17,6 +17,7 @@ class GenderController(private val profileService: ProfileService,
     @PostMapping("newGenderPreferences")
     fun addGenderPreferences(@RequestBody body: InterestedGenderDTO, response: HttpServletResponse) {
         if(this.profileService.profileExistById(body.profileId)) {
+            println("profil istnieje")
             if(this.genderService.genderExistById(body.genderId)){
                 val profile = this.profileService.getProfileById(body.profileId)
                 val gender = this.genderService.getGenderById(body.genderId)
@@ -52,9 +53,11 @@ class GenderController(private val profileService: ProfileService,
                 val profile = this.profileService.getProfileById(body.profileId)
                 val gender = this.genderService.getGenderById(body.genderId)
                 val oldGenderInterested = this.interestedGenderService.getInterestedGenderByProfileId(profile, gender)
-                oldGenderInterested.gender =  gender
-                oldGenderInterested.decision = body.decision
-                this.interestedGenderService.save(oldGenderInterested)
+                if (oldGenderInterested != null) {
+                    oldGenderInterested.gender =  gender
+                    oldGenderInterested.decision = body.decision
+                    this.interestedGenderService.save(oldGenderInterested)
+                }
             } else {
                 println("Nie istnieje płeć lub orientacja")
             }

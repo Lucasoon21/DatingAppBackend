@@ -1,5 +1,6 @@
 package com.lukasz.wolski.DatingAppBackend.repositories
 
+import com.lukasz.wolski.DatingAppBackend.model.DictionaryGenderModel
 import com.lukasz.wolski.DatingAppBackend.model.ProfileModel
 import com.lukasz.wolski.DatingAppBackend.model.UserModel
 import org.springframework.data.jpa.repository.JpaRepository
@@ -11,5 +12,5 @@ interface ProfileRepository: JpaRepository<ProfileModel, Int> {
     fun findFirstByUser(user: Int): ProfileModel
     //fun findAllByIdNotAndAndHeightBetween(id: Int, heightFrom:Int, heightTo:Int): List<ProfileModel>?
 
-    fun findAllByIdNotAndAndHeightBetweenAndWeightBetween(id: Int, heightFrom:Int, heightTo:Int, weightFrom:Int, weightTo:Int): List<ProfileModel>?
+    fun findAllByIdNotInAndHeightBetweenAndWeightBetweenAndDictionaryGenderIn(id: Collection<Int>, heightFrom:Int, heightTo:Int, weightFrom:Int, weightTo:Int, gender: Collection<DictionaryGenderModel>): List<ProfileModel>?
 }

@@ -1,18 +1,15 @@
 package com.lukasz.wolski.DatingAppBackend.controller
 
-import com.lukasz.wolski.DatingAppBackend.dtos.InterestedRelationshipDTO
-import com.lukasz.wolski.DatingAppBackend.dtos.ProfileImageDTO
-import com.lukasz.wolski.DatingAppBackend.dtos.ShortProfileUsersOnSwipeDTO
-import com.lukasz.wolski.DatingAppBackend.model.MatchModel
+import com.lukasz.wolski.DatingAppBackend.dtos.*
 import com.lukasz.wolski.DatingAppBackend.model.ProfileModel
 import com.lukasz.wolski.DatingAppBackend.services.ImageUserService
 import com.lukasz.wolski.DatingAppBackend.services.MatchService
 import com.lukasz.wolski.DatingAppBackend.services.ProfileService
+import com.lukasz.wolski.DatingAppBackend.services.SwipeDecisionService
 import org.joda.time.LocalDate
 import org.joda.time.Years
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("match")
@@ -20,10 +17,40 @@ class MatchController(
     private val profileService: ProfileService,
     private val matchService: MatchService,
     private val imageUserService: ImageUserService,
+    private val swipeDecisionService: SwipeDecisionService,
 ) {
 
-    @RequestMapping("getProfileRelationship")
-    fun getProfileMatch(@RequestParam(value = "profile") profileId: Int): ArrayList<ShortProfileUsersOnSwipeDTO>? {
+    @DeleteMapping("deleteMatch")
+    fun deleteMatch(@RequestBody body: MatchDTO): ResponseEntity<String> {
+        if (this.profileService.profileExistById(body.profileId) && this.profileService.profileExistById(body.selectProfileUserId)) {
+            val profileFirst = profileService.getProfileById(body.profileId)
+            val profileSecond = profileService.getProfileById(body.selectProfileUserId)
+
+            val match = matchService.getMatch(profileFirst, profileSecond)
+            val match2 = matchService.getMatch(profileSecond, profileFirst)
+            if(match!=null) {
+                println("match.id "+match.id)
+                matchService.deleteMatch(match.id)
+                return ResponseEntity.ok().body("usunięto match\n")
+            } else if(match2!=null) {
+                println("match2.id "+match2.id)
+                matchService.deleteMatch(match2.id)
+                return ResponseEntity.ok().body("usunięto match\n")
+            } else {
+                println("nie znaleziono match")
+                return ResponseEntity.badRequest().body("Nie znaleziono match\n")
+            }
+        } else {
+            println("nie znaleziono konta")
+        }
+        println("błąd")
+        return ResponseEntity.badRequest().body("Nie usunięto match\n")
+    }
+
+
+
+    @RequestMapping("getAllMatch")
+    fun getAllMatch(@RequestParam(value = "profile") profileId: Int): ArrayList<ShortProfileUsersOnSwipeDTO>? {
       //  fun getProfileMatch(@RequestParam(value = "profile") profileId: Int): ArrayList<ShortProfileUsersOnSwipeDTO>? {
         if (this.profileService.profileExistById(profileId)) {
             val profile = profileService.getProfileById(profileId)

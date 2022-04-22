@@ -12,7 +12,9 @@ class ProfileService(private val profileRepository: ProfileRepository, private v
     fun save(profile: ProfileModel): ProfileModel? {
         return this.profileRepository.save(profile)
     }
-
+    fun deleteAccount(id: Int) {
+        return this.profileRepository.deleteById(id)
+    }
     fun userExist(user: UserModel): Boolean {
         return this.profileRepository.findByUser(user) != null
     }

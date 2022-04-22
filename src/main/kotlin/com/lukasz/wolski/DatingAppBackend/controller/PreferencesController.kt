@@ -23,6 +23,98 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
 
                             ){
 
+
+    @RequestMapping("getPreferencesGender")
+    fun getPreferencesGender(@RequestParam(value = "profile") profileId: Int): ArrayList<PreferencesGenderDTO>? {
+        if (this.profileService.profileExistById(profileId)) {
+            val listGender = dictionaryService.getAllGenderDictionary()
+            val profile = this.profileService.getProfileById(profileId)
+            val genderUserPreferences  = this.interestedGenderService.getAllInterestedGenderByProfile(profile)
+
+            // val returnListGender: ArrayList<GenderUserDTO> = emptyList<GenderUserDTO>() as ArrayList<GenderUserDTO>
+            val returnListGender = ArrayList<PreferencesGenderDTO>()
+            if(listGender!=null){
+                for(item in listGender){
+                    val gender: PreferencesGenderDTO = PreferencesGenderDTO(
+                        profileId,
+                        item.id,
+                        1,
+                        item.name
+                    )
+                    returnListGender.add(gender)
+                }
+                if (genderUserPreferences != null) {
+                    for(item in genderUserPreferences){
+                        val e = returnListGender.indexOfFirst { it.genderId == item.gender.id }
+                        returnListGender[e].decision = item.decision
+                    }
+                }
+                return returnListGender
+            }
+            else {
+                println("Użytkownik nie ma wybranego gender")
+            }
+        } else {
+            println("Nie znaleziono")
+        }
+        return null;
+    }
+
+
+    @PutMapping("changePreferencesGender")
+    fun changePreferencesGender(@RequestBody body: ChangeGenderPreferencesDTO, response: HttpServletResponse) {
+        val profileId = body.profileId
+        val newPreferencesGenderList = body.listGender  //3
+        println(newPreferencesGenderList.size)
+       if (this.profileService.profileExistById(profileId)) {
+            val profile = this.profileService.getProfileById(profileId)
+            val listPreferencesGender =  this.interestedGenderService.getAllInterestedGenderByProfile(profile) //0
+            val listGender = dictionaryService.getAllGenderDictionary() //3
+           println(listPreferencesGender?.size ?: 0)
+           println(listGender?.size ?: 0)
+
+            if (listGender != null) {
+                for(newGenderPreferences in newPreferencesGenderList) {
+                    val gender = this.dictionaryService.getGender(newGenderPreferences.genderId)
+                    if(gender != null){
+                        println("Rozne od 0")
+                        val oldGender = this.interestedGenderService.getInterestedGenderByProfileId(profile,gender)
+
+                        if(oldGender != null) {
+                            oldGender.decision = newGenderPreferences.decision
+                            this.interestedGenderService.save(oldGender)
+                        } else {
+                            val newGenderModel = InterestedGenderModel()
+                            newGenderModel.gender = gender
+                            newGenderModel.decision = newGenderPreferences.decision
+                            newGenderModel.profile = profile
+                            this.interestedGenderService.save(newGenderModel)
+                        }
+                    } else {
+                        println("nie znaleziono gender")
+                    }
+                }
+            } else{
+                println("lista gender jest pusta")
+            }
+        } else {
+            println("nie znaleziono uzytkownika")
+        }
+        println(body.listGender)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     @RequestMapping("getAgePreferences")
     fun getAgePreferences(@RequestParam(value = "profile") profileId: Int): InterestedAgeDTO? {
 
@@ -57,7 +149,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
         if (this.profileService.profileExistById(body.profileId)) {
             if(body.ageFrom<body.ageTo && body.ageFrom>18 && body.ageTo<100) {
                 val profile = this.profileService.getProfileById(body.profileId)
-                var oldAgePreferences = this.interestedAgeService.getInterestedAgeByProfileId(profile)
+                val oldAgePreferences = this.interestedAgeService.getInterestedAgeByProfileId(profile)
                 if(oldAgePreferences!=null) {
                     oldAgePreferences.age_from = body.ageFrom
                     oldAgePreferences.age_to = body.ageTo
@@ -245,6 +337,10 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
         }
 
     }
+
+
+
+
 
     @PutMapping("changeWeightPreferences")
     fun editWeightPreferences(@RequestBody body: InterestedWeightDTO, response: HttpServletResponse) {

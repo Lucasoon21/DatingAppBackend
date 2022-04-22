@@ -12,6 +12,10 @@ class UserService(private val userRepository: UserRepository) {
         //TODO - sprawdzić bo może być zawsze 0 lub wiecej - przyklad checkMatch
     }
 
+    fun deleteAccount(id: Int) {
+            return this.userRepository.deleteById(id)
+    }
+
     fun findIdByEmail(email: String): Int {
         val user = this.userRepository.findByEmail(email);
         if (user != null) {
@@ -38,5 +42,6 @@ class UserService(private val userRepository: UserRepository) {
     fun getUser(email: String): UserModel? {
         return this.userRepository.findByEmail(email)
     }
+
 
 }
