@@ -4,4 +4,5 @@ data class SwipeDTO(
     val profileId: Int,
     val selectProfileUserId: Int,
     val decision: Int,
+
 )
