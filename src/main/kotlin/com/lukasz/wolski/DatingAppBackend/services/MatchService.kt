@@ -29,5 +29,7 @@ class MatchService(private val profileRepository: ProfileRepository,
     fun deleteMatch(id: Int) {
         return this.matchRepository.deleteById(id)
     }
+    fun checkMatch(firstProfile: ProfileModel, secondProfile: ProfileModel) {
 
+    }
 }

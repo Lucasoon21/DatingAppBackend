@@ -54,6 +54,7 @@ class MatchController(
       //  fun getProfileMatch(@RequestParam(value = "profile") profileId: Int): ArrayList<ShortProfileUsersOnSwipeDTO>? {
         if (this.profileService.profileExistById(profileId)) {
             val profile = profileService.getProfileById(profileId)
+            //tu chyba nie jesy za dobrze, sprawdzic zapytanie
             val matchList = matchService.getAllMatch(profile)
 
             val returnListMatches = ArrayList<ShortProfileUsersOnSwipeDTO>()
