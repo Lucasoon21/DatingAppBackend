@@ -131,7 +131,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
             } else {
                 returnAge = InterestedAgeDTO(
                     18,
-                    100,
+                    60,
                     profile.id
                 )
             }
@@ -147,7 +147,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
     fun editAgePreferences(@RequestBody body: InterestedAgeDTO, response: HttpServletResponse) {
 
         if (this.profileService.profileExistById(body.profileId)) {
-            if(body.ageFrom<body.ageTo && body.ageFrom>18 && body.ageTo<100) {
+            if(body.ageFrom<body.ageTo && body.ageFrom>18 && body.ageTo<60) {
                 val profile = this.profileService.getProfileById(body.profileId)
                 val oldAgePreferences = this.interestedAgeService.getInterestedAgeByProfileId(profile)
                 if(oldAgePreferences!=null) {
@@ -265,7 +265,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
                 )
             } else {
                 returnHeight = InterestedHeightDTO(
-                    100,
+                    140,
                     200,
                     profile.id
                 )
@@ -282,7 +282,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
     fun editHeightPreferences(@RequestBody body: InterestedHeightDTO, response: HttpServletResponse) {
 
         if (this.profileService.profileExistById(body.profileId)) {
-            if(body.heightFrom<body.heightTo && body.heightFrom>=100 && body.heightTo<200) {
+            if(body.heightFrom<body.heightTo && body.heightFrom>=140 && body.heightTo<=200) {
                 val profile = this.profileService.getProfileById(body.profileId)
                 var oldHeightPreferences = this.interestedHeightService.getInterestedHeightByProfileId(profile)
                 if(oldHeightPreferences!=null) {
@@ -325,8 +325,8 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
                 )
             } else {
                 returnWeight = InterestedWeightDTO(
-                    100,
-                    200,
+                    40,
+                    130,
                     profile.id
                 )
             }
@@ -347,7 +347,7 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
 
 
         if (this.profileService.profileExistById(body.profileId)) {
-            if(body.weightFrom<body.weightTo && body.weightFrom>=30 && body.weightTo<=200) {
+            if(body.weightFrom<body.weightTo && body.weightFrom>=40 && body.weightTo<=130) {
                 val profile = this.profileService.getProfileById(body.profileId)
                 var oldWeightPreferences = this.interestedWeightService.getInterestedWeightByProfile(profile)
                 if(oldWeightPreferences!=null) {
