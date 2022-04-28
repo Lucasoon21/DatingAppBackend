@@ -30,9 +30,6 @@ class SwipeController(private val userService: UserService,
             val profileILike: ArrayList<ProfileModel>
             if(myLike!=null && myLike.size!=0){
                 profileILike = myLike.map { it.userReceiver } as ArrayList<ProfileModel>
-                println(profileILike[0].id)
-                println(profileILike[1].id)
-                println(profileILike[2].id)
             } else {
                 profileILike = ArrayList<ProfileModel>()
             }

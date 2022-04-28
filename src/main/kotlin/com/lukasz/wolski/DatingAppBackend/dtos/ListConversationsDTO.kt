@@ -5,7 +5,7 @@ import java.util.*
 
 data class ListConversationsDTO(
     val name:String,
-    val profileImageLink: ImageUserModel?,
+    val profileImageLink: String?,
     val contentLastMessage: String,
     val dateMessage: Date,
     val dateMessageFormat: String,

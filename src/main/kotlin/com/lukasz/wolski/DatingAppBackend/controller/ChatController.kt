@@ -39,7 +39,7 @@ class ChatController(private val profileService: ProfileService,
                 val user = UserForMessage(
                     conversation.receiverProfile.id,
                     conversation.receiverProfile.name,
-                    profilePhoto?.imageLink ?: ""
+                    profilePhoto?.imageLink ?: "https://ui-avatars.com/api/?background=0dbc3f&color=FFF&name="+conversation.receiverProfile.name[0]
                 )
                 val singleConversation = ConversationDTO(
                     conversation.id,
@@ -55,7 +55,7 @@ class ChatController(private val profileService: ProfileService,
                 val user = UserForMessage(
                     conversation.receiverProfile.id,
                     conversation.receiverProfile.name,
-                    profilePhoto?.imageLink ?: ""
+                    profilePhoto?.imageLink ?: "https://ui-avatars.com/api/?background=0dbc3f&color=FFF&name="+conversation.receiverProfile.name[0]
                 )
                 val singleConversation = ConversationDTO(
                     conversation.id,
@@ -112,7 +112,7 @@ class ChatController(private val profileService: ProfileService,
 
                         val conversation = ListConversationsDTO(
                             matches.profileSecond.name,
-                            profilePhoto,
+                            profilePhoto?.imageLink,
                             findConversationBetweenTwoUsers.content ?: "",
                             findConversationBetweenTwoUsers.dateMessage,
                             dateFormated,
@@ -131,7 +131,7 @@ class ChatController(private val profileService: ProfileService,
 
                         val conversation = ListConversationsDTO(
                             matches.profileFirst.name,
-                            profilePhoto,
+                            profilePhoto?.imageLink,
                             findConversationBetweenTwoUsers.content ?: "",
                             findConversationBetweenTwoUsers.dateMessage,
                             dateFormated,
@@ -140,7 +140,7 @@ class ChatController(private val profileService: ProfileService,
                         listConversations.add(conversation)
                     }
                 }
-                val xd = listConversations.sortedWith(compareBy(ListConversationsDTO::dateMessage))
+                val xd = listConversations.sortedWith(compareByDescending(ListConversationsDTO::dateMessage))
                 return xd
             }
         } else {
@@ -151,10 +151,10 @@ class ChatController(private val profileService: ProfileService,
 
     @PostMapping("sendMessage")
     fun sendMessage(@RequestBody body: SendMessageDTO, response: HttpServletResponse): ResponseEntity<String> {
-        if(this.profileService.profileExistById(body.receiverProfileId) && this.profileService.profileExistById(body.senderProfileId)) {
+        if(this.profileService.profileExistById(body.receiverProfileId.toInt()) && this.profileService.profileExistById(body.senderProfileId.toInt())) {
             //Sprawdzic czy jest match
-            val senderProfile = this.profileService.getProfileById(body.senderProfileId)
-            val receiverProfile= this.profileService.getProfileById(body.receiverProfileId)
+            val senderProfile = this.profileService.getProfileById(body.senderProfileId.toInt())
+            val receiverProfile= this.profileService.getProfileById(body.receiverProfileId.toInt())
 
 
             val match = matchService.getMatch(senderProfile, receiverProfile)

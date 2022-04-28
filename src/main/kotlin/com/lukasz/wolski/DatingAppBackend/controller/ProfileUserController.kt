@@ -166,7 +166,7 @@ class ProfileUserController(
             val job = body.job
             //val zodiac = dictionaryService.getZodiac(body.zodiacId)
 
-            if(orientation != null && (height in 100..200) && (weight in 30..150) && alcohol!=null
+            if(orientation != null && (height in 140..200) && (weight in 40..130) && alcohol!=null
                 && children!=null && cigarettes!=null && education!=null && eyeColor!=null
                     && religious!=null) {
                 oldProfile.height = height

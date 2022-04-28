@@ -12,10 +12,10 @@ class InterestedHeightModel {
         var user_id: Int = 0
     */
     @Column
-    var height_from: Int = 0
+    var height_from: Int = 140
 
     @Column
-    var height_to: Int = 0
+    var height_to: Int = 200
 
     /* WIELE DO JEDNEGO
     * Z PERSON MODEL

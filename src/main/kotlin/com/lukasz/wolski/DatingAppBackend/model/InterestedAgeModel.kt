@@ -13,10 +13,10 @@ class InterestedAgeModel {
     var user_id: Int = 0
 */
     @Column
-    var age_from: Int = 0
+    var age_from: Int = 18
 
     @Column
-    var age_to: Int = 0
+    var age_to: Int = 60
 
     /* WIELE DO JEDNEGO
     * Z PERSON MODEL

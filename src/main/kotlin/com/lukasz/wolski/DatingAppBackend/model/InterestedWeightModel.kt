@@ -12,10 +12,10 @@ class InterestedWeightModel {
         var user_id: Int = 0
     */
     @Column
-    var weight_from: Int = 0
+    var weight_from: Int = 40
 
     @Column
-    var weight_to: Int = 0
+    var weight_to: Int = 130
 
     /* WIELE DO JEDNEGO
     * Z PERSON MODEL
