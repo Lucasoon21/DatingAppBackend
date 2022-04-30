@@ -17,7 +17,7 @@ class HobbyUserService(private val hobbyUserRepository: HobbyUserRepository) {
     //fun getInterestedHobbyByProfileId(idProfile: ProfileModel, idHobby: DictionaryHobbyModel): HobbyUserModel {
         //return this.hobbyUserRepository.findFirstInterestedHobbyModelByProfileAndHobby(idProfile, idHobby)
     //}
-    fun getAllHobbyByProfile(profile: ProfileModel):List<HobbyUserModel> {
+    fun getAllHobbyByProfile(profile: ProfileModel):List<HobbyUserModel>? {
         return this.hobbyUserRepository.findAllByProfile(profile)
     }
     fun getHobbyUserByHobbyIdAndProfileId(profile: ProfileModel, hobby: DictionaryHobbyModel): HobbyUserModel? {

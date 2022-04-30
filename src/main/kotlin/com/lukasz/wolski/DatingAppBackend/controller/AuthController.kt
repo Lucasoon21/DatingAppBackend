@@ -49,7 +49,10 @@ class AuthController(private val userService: UserService,
     @PostMapping("register")
     fun register(@RequestBody body: RegisterDTO, response: HttpServletResponse) {
         val email = body.email.lowercase()
-
+        val res: MutableMap<String, String> = HashMap()
+        res["isError"] = "NO"
+        res["emailExists"] = "NO"
+        res["errorValidate"] = "NO"
         if(isValidEmail(email) && isValidPassword(body.password) && isValidPassword(body.confirmPassword) && body.confirmPassword == body.password){
             val user = UserModel()
             user.email = email.lowercase()
@@ -63,14 +66,27 @@ class AuthController(private val userService: UserService,
                     this.userService.save(user)
                     saveProfileUser(user, body, gender, orientation, body.email)
                     return response.setStatus(HttpServletResponse.SC_ACCEPTED)
+                } else {
+                    res["isError"] = "YES"
+                    response.contentType = APPLICATION_JSON_VALUE
+                    ObjectMapper().writeValue(response.outputStream, res)
+                    println("Nie istnieje taka płeć lub orientacja"+body.gender+" "+body.orientation)
                 }
             }
             else{
-
+                res["isError"] = "YES"
+                res["emailExists"] = "YES"
+                response.contentType = APPLICATION_JSON_VALUE
+                ObjectMapper().writeValue(response.outputStream, res)
+                println("Istnieje taki mail")
                 return  response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE)
             }
         } else {
-            println("Dane nieprawidłowe")
+            res["isError"] = "YES"
+            res["errorValidate"] = "YES"
+            response.contentType = APPLICATION_JSON_VALUE
+            ObjectMapper().writeValue(response.outputStream, res)
+            println("Dane nieprawidłowe, nie przechodzi walidacji")
             return  response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE)
         }
     }

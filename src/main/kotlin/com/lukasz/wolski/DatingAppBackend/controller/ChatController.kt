@@ -87,7 +87,10 @@ class ChatController(private val profileService: ProfileService,
                     val secondTmp = this.chatService.getConversationBetweenTwoUsers(matches.profileSecond, matches.profileFirst)
                     var findConversationBetweenTwoUsers: ChatModel? =  firstTmp ?: secondTmp
 
+
                     if(firstTmp!=null &&  secondTmp!=null) {
+                        println("first "+firstTmp.dateMessage)
+                        println("second "+firstTmp.dateMessage)
                         if(firstTmp.dateMessage>secondTmp.dateMessage) {
                             findConversationBetweenTwoUsers = firstTmp
                         } else {
@@ -101,9 +104,10 @@ class ChatController(private val profileService: ProfileService,
                     if(matches.profileFirst.id==profileId && findConversationBetweenTwoUsers!=null) {
                         val profilePhoto = imageUserService.getMainPhoto(matches.profileSecond)
                         val dateFormated:String
-                        var OneDay = Date().getTime() + (1 * 24 * 60 * 60 * 1000)
-
-                        if(OneDay>findConversationBetweenTwoUsers.dateMessage.time)
+                        var oneDay = Date().time - (1 * 24 * 60 * 60 * 1000)
+                        println("date select "+findConversationBetweenTwoUsers.dateMessage.time)
+                        println("date select "+oneDay)
+                        if(oneDay<findConversationBetweenTwoUsers.dateMessage.time)
                             dateFormated = SimpleDateFormat("HH:mm").format(findConversationBetweenTwoUsers.dateMessage)
                         else
                             dateFormated = SimpleDateFormat("dd/MM").format(findConversationBetweenTwoUsers.dateMessage)
