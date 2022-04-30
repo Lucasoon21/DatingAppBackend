@@ -16,7 +16,7 @@ class InterestedRelationshipService(private val interstedRelationshipRepository:
     fun getInterestedRelationshipByProfileId(idProfile: ProfileModel, idRelationship: DictionaryRelationshipModel): InterestedRelationshipModel {
         return this.interstedRelationshipRepository.findFirstInterestedRelationshipModelByProfileAndRelationship(idProfile, idRelationship)
     }
-    fun getAllInterestedRelationshipByProfile(profile: ProfileModel):List<InterestedRelationshipModel> {
+    fun getAllInterestedRelationshipByProfile(profile: ProfileModel):List<InterestedRelationshipModel>? {
         return this.interstedRelationshipRepository.findAllByProfile(profile)
     }
     fun getRelationshipUserByProfileAndRelationshipDictionary(profile: ProfileModel, relationship: DictionaryRelationshipModel): InterestedRelationshipModel? {

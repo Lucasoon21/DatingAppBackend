@@ -136,19 +136,46 @@ class ProfileUserController(
     fun changeDescription(@RequestBody body: ChangeDescriptionDTO, response: HttpServletResponse): ResponseEntity<String> {
 
         if (this.profileService.profileExistById(body.profileId)) {
-            val oldProfile = this.profileService.getProfileById(body.profileId)
-            oldProfile.description = body.description
-            this.profileService.save(oldProfile)
+            if(body.description.length<=500) {
 
-            return ResponseEntity.ok().body("Zmieniono opis\n")
+                val oldProfile = this.profileService.getProfileById(body.profileId)
+                oldProfile.description = body.description
+                this.profileService.save(oldProfile)
+                return ResponseEntity.ok().body("Zmieniono opis\n")
+
+            } else {
+                return ResponseEntity.badRequest().body("Nie zminiono opisu - za dużo znaków\n")
+            }
         } else {
             println("taki profile nie istnieje")
-            return ResponseEntity.badRequest().body("Nie zminiono opisu\n")
+            return ResponseEntity.badRequest().body("Nie zminiono opisu - nie znaleziono użytkownika\n")
         }
     }
 
+    @RequestMapping("getDescription")
+    fun getDescription(@RequestParam(value = "profile") profileId: Int): GetDescriptionDTO? {
+        if (this.profileService.profileExistById(profileId)){
+            val profile = this.profileService.getProfileById(profileId)
+            val desc = GetDescriptionDTO(
+                profile.id,
+                profile.description?: ""
+            )
+            return desc
+        } else
+        {
+            println("profil nie istnieje")
+        }
+        return null
 
-    @PutMapping("changeProfileDetails")
+    }
+
+
+
+
+
+
+
+        @PutMapping("changeProfileDetails")
     fun changeProfileDetails(@RequestBody body: ChangeProfileDetailsDTO, response: HttpServletResponse): ResponseEntity<String> {
 
         if (this.profileService.profileExistById(body.profileId)) {
@@ -168,7 +195,7 @@ class ProfileUserController(
 
             if(orientation != null && (height in 140..200) && (weight in 40..130) && alcohol!=null
                 && children!=null && cigarettes!=null && education!=null && eyeColor!=null
-                    && religious!=null) {
+                    && religious!=null && job.length<=50) {
                 oldProfile.height = height
                 oldProfile.weight = weight
                 oldProfile.dictionaryOrientation = orientation
@@ -195,7 +222,9 @@ class ProfileUserController(
 
     @RequestMapping("getProfileRelationship")
     fun getProfileRelationship(@RequestParam(value = "profile") profileId: Int): ArrayList<InterestedRelationshipDTO>? {
-        if (this.profileService.profileExistById(profileId)) {
+        println("profileId "+profileId)
+        if (this.profileService.profileExistById(profileId))
+        {
             val listRelationship = dictionaryService.getAllRelationshipDictionary()
             val profile = this.profileService.getProfileById(profileId)
             val relationshipUser  = this.interestedRelationshipService.getAllInterestedRelationshipByProfile(profile)
@@ -210,11 +239,16 @@ class ProfileUserController(
                         item.name
                     )
                     returnListRelationship.add(relationship)
+                    println("Dodano do array")
                 }
-                for(item in relationshipUser){
-                    val e = returnListRelationship.indexOfFirst { it.relationshipId == item.relationship.id }
-                    returnListRelationship[e].decision = item.decison
+                if (relationshipUser != null) {
+                    for(item in relationshipUser){
+                        println("item in relationshipUser")
+                        val e = returnListRelationship.indexOfFirst { it.relationshipId == item.relationship.id }
+                        returnListRelationship[e].decision = item.decison
+                    }
                 }
+                println("returnListRelationship "+returnListRelationship.toString())
                 return returnListRelationship
             }
             else {
@@ -284,8 +318,8 @@ class ProfileUserController(
                 oldProfile.location?: "",
                 oldProfile.dictionaryAlcohol?.name?: "",
                 oldProfile.job?: "",
-                oldProfile.height?: 0,
-                oldProfile.weight?: 0,
+                oldProfile.height,
+                oldProfile.weight,
                 oldProfile.dictionaryEducation?.name ?: "",
                 oldProfile.dictionaryReligious?.name?: "",
                 oldProfile.dictionaryChildren?.name ?: "",
@@ -324,9 +358,11 @@ class ProfileUserController(
                     )
                     returnListHobby.add(hobby)
                 }
-                for(item in hobbyUser){
-                    val e = returnListHobby.indexOfFirst { it.hobbyId == item.hobby.id }
-                    returnListHobby[e].decision = item.decison
+                if (hobbyUser != null) {
+                    for(item in hobbyUser){
+                        val e = returnListHobby.indexOfFirst { it.hobbyId == item.hobby.id }
+                        returnListHobby[e].decision = item.decison
+                    }
                 }
                 return returnListHobby
             }
