@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $PORT target/*.war
+web: java -jar build/libs/DatingApp-Backend4-1.0.jar
