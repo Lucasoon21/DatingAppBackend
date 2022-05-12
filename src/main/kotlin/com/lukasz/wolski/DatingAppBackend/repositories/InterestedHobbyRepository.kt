@@ -2,6 +2,7 @@ package com.lukasz.wolski.DatingAppBackend.repositories
 
 import com.lukasz.wolski.DatingAppBackend.model.*
 import org.springframework.data.jpa.repository.JpaRepository
+import java.util.ArrayList
 
 interface InterestedHobbyRepository:JpaRepository<InterestedHobbyModel,Int> {
 
@@ -13,6 +14,8 @@ interface InterestedHobbyRepository:JpaRepository<InterestedHobbyModel,Int> {
 
     fun findAllByProfileAndHobby(profileId: ProfileModel,hobby: DictionaryHobbyModel): InterestedHobbyModel?
 
+    fun findAllByHobbyInAndDecison(hobbyInter: ArrayList<DictionaryHobbyModel>, decision: Int): List<InterestedHobbyModel>?
 
+    fun findAllByProfileAndDecison(profile: ProfileModel, decision: Int): List<InterestedHobbyModel>?
 
 }

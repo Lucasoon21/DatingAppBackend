@@ -9,17 +9,14 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry
 @Configuration
 @EnableWebSocketMessageBroker
 class WebSocketConfiguration : WebSocketMessageBrokerConfigurer {
+
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
-        println("-----------------------------------")
-        registry.addEndpoint("/chat").setAllowedOrigins("*").setAllowedOriginPatterns("*").withSockJS()
+        registry.addEndpoint("/chat").setAllowedOrigins("*").withSockJS()
     }
 
     override fun configureMessageBroker(registry: MessageBrokerRegistry) {
-        println("-----------------------------------")
         registry.setApplicationDestinationPrefixes("/app").enableSimpleBroker("/topic");
-/*
-        registry.setApplicationDestinationPrefixes("/app")
-        registry.enableSimpleBroker("/chatroom", "/user")
-        registry.setUserDestinationPrefix("/user")*/
     }
 }
+
+

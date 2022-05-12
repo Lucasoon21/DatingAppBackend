@@ -21,7 +21,7 @@ class InterestedHeightModel {
     * Z PERSON MODEL
     * */
     @OneToOne
-    @JoinColumn(name="profile_id")
+    @JoinColumn(name="profile_id", unique = true)
     @JsonIgnore
     var profileId: ProfileModel = ProfileModel()
 }

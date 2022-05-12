@@ -1,13 +1,8 @@
 package com.lukasz.wolski.DatingAppBackend.model
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore
 import lombok.NoArgsConstructor
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import javax.persistence.*
-
-
 @NoArgsConstructor
 @Entity(name = "UserDetails")
 class UserModel {
@@ -30,15 +25,12 @@ class UserModel {
 
     @Column
     var isActive = true
-
+/*
     @OneToOne(mappedBy = "user",fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL))
-    val profileUser: ProfileModel? = null
-
+    @Column(unique = true)
+    val profileUser: ProfileModel = ProfileModel()
+*/
     fun comparePassword(password: String): Boolean {
         return BCryptPasswordEncoder().matches(password, this.password)
     }
-
-    //@OneToOne(mappedBy = "user")
-  //  val person: ProfileModel = ProfileModel()
-
 }

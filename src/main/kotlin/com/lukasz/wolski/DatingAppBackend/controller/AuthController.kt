@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lukasz.wolski.DatingAppBackend.dtos.LoginDTO
-import com.lukasz.wolski.DatingAppBackend.dtos.LoginStatusDTO
 import com.lukasz.wolski.DatingAppBackend.dtos.RegisterDTO
 import com.lukasz.wolski.DatingAppBackend.dtos.RegisterDetailsDTO
 import com.lukasz.wolski.DatingAppBackend.model.DictionaryGenderModel
@@ -37,15 +36,21 @@ class AuthController(private val userService: UserService,
                      private val genderService: GenderService)
 {
 
-    val EMAIL_ADDRESS_PATTERN: Pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-    val PASSWORD_PATTERH: Pattern = Pattern.compile("^((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W]).{6,20})$")
+    val EMAIL_ADDRESS_PATTERN: Pattern = Pattern.compile("^[a-zA-Z0-9.!#\$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*\$", Pattern.CASE_INSENSITIVE);
+    val PASSWORD_PATTERH: Pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{6,20}\$") //jedna litera, jedna mała liczba, jedna duża liczba, jeden znak specjalny, od 6 do 20 znaków
+    val NAME_PATTERH: Pattern = Pattern.compile("^[A-Za-z\\s]{2,20}\$") //litery i spacje, od 2 do 20 znaków
     fun isValidEmail(str: String): Boolean{
-
         return EMAIL_ADDRESS_PATTERN.matcher(str).matches()
     }
+
     fun isValidPassword(str: String): Boolean{
         return PASSWORD_PATTERH.matcher(str).matches()
     }
+
+    fun isValidName(str: String): Boolean{
+        return NAME_PATTERH.matcher(str).matches()
+    }
+
     @PostMapping("register")
     fun register(@RequestBody body: RegisterDTO, response: HttpServletResponse) {
         val email = body.email.lowercase()
@@ -53,7 +58,7 @@ class AuthController(private val userService: UserService,
         res["isError"] = "NO"
         res["emailExists"] = "NO"
         res["errorValidate"] = "NO"
-        if(isValidEmail(email) && isValidPassword(body.password) && isValidPassword(body.confirmPassword) && body.confirmPassword == body.password){
+        if(isValidEmail(email) && isValidPassword(body.password) && isValidPassword(body.confirmPassword) && body.confirmPassword == body.password && isValidName(body.name)){
             val user = UserModel()
             user.email = email.lowercase()
             user.password = body.password
@@ -100,7 +105,7 @@ class AuthController(private val userService: UserService,
             profile.user = user2
 
             profile.name=body.name
-            profile.date_birth = body.dateBirth
+            profile.dateBirth = body.dateBirth
             profile.dictionaryGender = gender
             profile.dictionaryOrientation = orientation
 
@@ -115,7 +120,7 @@ class AuthController(private val userService: UserService,
 
         println(body.orientation)
         val profile = ProfileModel()
-        profile.date_birth = body.dateBirth
+        profile.dateBirth = body.dateBirth
         profile.name = body.name
 
         val user = userService.getUser(body.email)
@@ -152,14 +157,7 @@ class AuthController(private val userService: UserService,
             return  response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE)
         }
     }
-/*
-*                 val localNow: LocalDate = LocalDate.now()
-                val birthDate: LocalDate = LocalDate.fromDateFields(profile.date_birth)
-                val age: Years = Years.yearsBetween(birthDate, localNow)
-                if(age.years>=18) {
 
-                }
-* */
     @PostMapping("login")
     fun login(@RequestBody body: LoginDTO, response: HttpServletResponse): ResponseEntity<String> {
         println("proba logowania")
@@ -188,12 +186,13 @@ class AuthController(private val userService: UserService,
                 println(userProfile.id)
                 val profileId = profileService.findIdByUser(body.email)
                 val profile = profileService.getProfileById(profileId)
-                if(profile.isActive==false || userProfile.isActive==false) {
+                if(profile.isActive==false || userProfile.isActive==false)
+                {
                     res["isActive"] = "ERR"
                     res["isError"] = "YES"
                 }
                     val localNow: LocalDate = LocalDate.now()
-                    val birthDate: LocalDate = LocalDate.fromDateFields(profile.date_birth)
+                    val birthDate: LocalDate = LocalDate.fromDateFields(profile.dateBirth)
                     val age: Years = Years.yearsBetween(birthDate, localNow)
                     if(age.years>=18) {
                         val accessToken:String = getAccessToken(body.email)
@@ -204,9 +203,9 @@ class AuthController(private val userService: UserService,
                         res["user_id"] = userId.toString()
                         response.contentType = APPLICATION_JSON_VALUE
                         ObjectMapper().writeValue(response.outputStream, res)
-                        val user: LoginDTO = LoginDTO(body.email, body.password, accessToken, refreshToken)
-                        println(user)
-                        return ResponseEntity.ok().body("Zalogowano\n"+user)
+                        //val user: LoginDTO = LoginDTO(body.email, body.password, accessToken, refreshToken)
+                        //println(user)
+                        return ResponseEntity.ok().body("Zalogowano\n")
                     } else {
                         res["isOver18Years"] = "ERR"
                         res["isError"] = "YES"
@@ -214,14 +213,9 @@ class AuthController(private val userService: UserService,
                         ObjectMapper().writeValue(response.outputStream, res)
                         return ResponseEntity.ok().body("Konto nie ma 18 lat\n")
                     }
-                /*} else {
-                    res["isActive"] = "ERR"
-                    res["isError"] = "YES"
-                    response.contentType = APPLICATION_JSON_VALUE
-                    ObjectMapper().writeValue(response.outputStream, res)
-                    return ResponseEntity.ok().body("Konto nie jest aktywne\n")
-                }*/
-            } else {
+
+            }
+            else {
                 res["user"] = "ERR"
                 res["isError"] = "YES"
                 response.contentType = APPLICATION_JSON_VALUE
@@ -243,49 +237,6 @@ class AuthController(private val userService: UserService,
 
     }
 
-
-    @RequestMapping("hello")
-    fun helloWorld(@RequestParam(value = "name", defaultValue = "World") name: String): String? {
-        return "Hello $name!!"
-    }
-/*Jak wspomniano, ze względów bezpieczeństwa tokeny dostępu mogą być ważne przez krótki czas.
-Po wygaśnięciu aplikacje klienckie mogą użyć tokenu odświeżania do „odświeżenia” tokenu dostępu.
-Oznacza to, że token odświeżania to artefakt poświadczeń, który umożliwia aplikacji klienckiej
- uzyskanie nowych tokenów dostępu bez konieczności ponownego logowania się użytkownika.*/
-    @GetMapping("/token/refresh")
-    fun refreshToken(request: HttpServletRequest, response: HttpServletResponse): String
-    {
-        val authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
-        println(request.getHeader(HttpHeaders.AUTHORIZATION))
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            try {
-                val refreshToken = authorizationHeader.substring("Bearer ".length)
-                val algorithm = Algorithm.HMAC256("sekretnyKlucz".toByteArray())
-                val verifier = JWT.require(algorithm).build()
-                val decodedJWT = verifier.verify(refreshToken)
-                val username = decodedJWT.subject
-                val user: UserModel = userService.getUser(username)!!
-                val accessToken = getAccessToken(user.email)
-                val tokens: MutableMap<String, String> = HashMap()
-                tokens["access_token"] = accessToken
-                tokens["refresh_token"] = refreshToken
-                response.contentType = APPLICATION_JSON_VALUE
-                ObjectMapper().writeValue(response.outputStream, tokens)
-            } catch (err: Exception) {
-                response.setHeader("error", err.message)
-                response.status = HttpStatus.FORBIDDEN.value()
-                // response.sendError(FORBIDDEN.value());
-                val error: MutableMap<String, String?> = HashMap()
-                error["error message"] = err.message
-                response.contentType = MediaType.APPLICATION_JSON_VALUE
-                ObjectMapper().writeValue(response.outputStream, error)
-            }
-        } else {
-            throw RuntimeException("Refersh Token is missing")
-        }
-        return "ok"
-    }
-
     fun getAccessToken(mail: String): String {
         val algorithm = Algorithm.HMAC256("sekretnyKlucz".toByteArray())
         val token: String = JWT.create()
@@ -295,6 +246,7 @@ Oznacza to, że token odświeżania to artefakt poświadczeń, który umożliwia
             .sign(algorithm);
         return token
     }
+
     fun getRefreshToken(mail: String): String {
         val algorithm = Algorithm.HMAC256("sekretnyKlucz".toByteArray())
         val token: String = JWT.create()
@@ -306,43 +258,4 @@ Oznacza to, że token odświeżania to artefakt poświadczeń, który umożliwia
         return token
     }
 
-    @GetMapping("testApi")
-    fun tescik1(response: HttpServletResponse):String {
-        println("proba ")
-        println(response)
-        return "hello1"
-    }
-    @GetMapping("test/tescik2")
-    fun tescik2():String {
-        return "hello2"
-    }
-    @GetMapping("test/tescik3")
-    fun tescik3():String {
-        return "hello3"
-    }
 }
-/*
-
-    fun getRefreshToken(usermail: String) : String
-    {
-        val secretKey: String = "sekretnyKlucz"
-        val grantedAuthority = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_ACTIVE")
-        val curTimeMillis = System.currentTimeMillis()
-        val tokenJwt: String? = Jwts
-            .builder()
-            .setId("DatingAppJWT")
-            .setSubject(usermail)
-            /*  .claim("authorities",
-                  grantedAuthority.stream()
-                      .map(GrantedAuthority::getAuthority)
-                      .collect(Collectors.toList())
-              )*/
-            .setIssuedAt(Date(curTimeMillis))
-            .setExpiration(Date(curTimeMillis+(1000*60*30)))
-            .signWith(SignatureAlgorithm.HS512,secretKey.toByteArray())
-            .compact()
-
-        return tokenJwt.toString()
-    }
-
-*/

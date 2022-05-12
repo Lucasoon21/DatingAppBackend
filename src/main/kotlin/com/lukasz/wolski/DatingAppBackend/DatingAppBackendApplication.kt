@@ -7,6 +7,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 
 @SpringBootApplication(exclude = [SecurityAutoConfiguration::class])
+
 class DatingAppBackendApplication
 	fun main(args: Array<String>) {
 		runApplication<DatingAppBackendApplication>(*args)

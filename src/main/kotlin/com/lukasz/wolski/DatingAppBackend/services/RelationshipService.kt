@@ -18,3 +18,5 @@ class RelationshipService(private val typeRelationshipRepository: TypeRelationsh
         return this.typeRelationshipRepository.getById(id)
     }
 }
+
+

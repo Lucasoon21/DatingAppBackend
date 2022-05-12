@@ -47,9 +47,7 @@ class MatchController(
         return ResponseEntity.badRequest().body("Nie usunięto match\n")
     }
 
-
-
-    @RequestMapping("getAllMatch")
+    @GetMapping("getAllMatch")
     fun getAllMatch(@RequestParam(value = "profile") profileId: Int): ArrayList<ShortProfileUsersOnSwipeDTO>? {
       //  fun getProfileMatch(@RequestParam(value = "profile") profileId: Int): ArrayList<ShortProfileUsersOnSwipeDTO>? {
         if (this.profileService.profileExistById(profileId)) {
@@ -68,7 +66,7 @@ class MatchController(
                     }
 
                     val localNow: LocalDate = LocalDate.now()
-                    val birthDate: LocalDate = LocalDate.fromDateFields(profile.date_birth)
+                    val birthDate: LocalDate = LocalDate.fromDateFields(profile.dateBirth)
                     val age: Years = Years.yearsBetween(birthDate, localNow)
 
                     val profilePhoto = imageUserService.getMainPhoto(profile)
