@@ -1,10 +1,8 @@
 package com.lukasz.wolski.DatingAppBackend.repositories
 
-import com.lukasz.wolski.DatingAppBackend.model.BlockUserModel
 import com.lukasz.wolski.DatingAppBackend.model.ChatModel
 import com.lukasz.wolski.DatingAppBackend.model.ProfileModel
 import org.springframework.data.jpa.repository.JpaRepository
-import java.util.ArrayList
 
 interface ChatRepository: JpaRepository<ChatModel, Int> {
     fun findDistinctByReceiverProfileOrderByDateMessage(profileMy: ProfileModel): List<ChatModel>

@@ -3,8 +3,10 @@ package com.lukasz.wolski.DatingAppBackend.services
 import com.lukasz.wolski.DatingAppBackend.model.HobbyUserModel
 import com.lukasz.wolski.DatingAppBackend.model.ProfileModel
 import com.lukasz.wolski.DatingAppBackend.model.DictionaryHobbyModel
+import com.lukasz.wolski.DatingAppBackend.model.InterestedHobbyModel
 import com.lukasz.wolski.DatingAppBackend.repositories.HobbyUserRepository
 import org.springframework.stereotype.Service
+import java.util.ArrayList
 
 @Service
 class HobbyUserService(private val hobbyUserRepository: HobbyUserRepository) {
@@ -22,5 +24,9 @@ class HobbyUserService(private val hobbyUserRepository: HobbyUserRepository) {
     }
     fun getHobbyUserByHobbyIdAndProfileId(profile: ProfileModel, hobby: DictionaryHobbyModel): HobbyUserModel? {
         return this.hobbyUserRepository.findAllByProfileAndHobby(profile,hobby)
+    }
+
+    fun getAllProfileWhoInterstedToo(hobbyInter: ArrayList<DictionaryHobbyModel>):List<HobbyUserModel>? {
+        return this.hobbyUserRepository.findAllByHobbyInAndDecison(hobbyInter, 1)
     }
 }

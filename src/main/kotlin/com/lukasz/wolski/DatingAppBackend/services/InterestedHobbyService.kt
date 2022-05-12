@@ -3,6 +3,7 @@ package com.lukasz.wolski.DatingAppBackend.services
 import com.lukasz.wolski.DatingAppBackend.model.*
 import com.lukasz.wolski.DatingAppBackend.repositories.InterestedHobbyRepository
 import org.springframework.stereotype.Service
+import java.util.ArrayList
 
 @Service
 class InterestedHobbyService(private val interestedHobbyRepository: InterestedHobbyRepository) {
@@ -22,6 +23,10 @@ class InterestedHobbyService(private val interestedHobbyRepository: InterestedHo
     fun getPreferencesHobbyByHobbyIdAndProfileId(profile: ProfileModel, hobby: DictionaryHobbyModel): InterestedHobbyModel? {
         return this.interestedHobbyRepository.findAllByProfileAndHobby(profile,hobby)
 
+    }
+
+    fun getAllOnlyInterestedHobbyByProfile(profile: ProfileModel): List<InterestedHobbyModel>? {
+        return this.interestedHobbyRepository.findAllByProfileAndDecison(profile, 1)
     }
 
 

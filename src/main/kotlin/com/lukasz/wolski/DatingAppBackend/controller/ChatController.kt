@@ -73,8 +73,6 @@ class ChatController(private val profileService: ProfileService,
         return null
     }
 
-
-
     @GetMapping("getListConversation")
     fun getListConversation(@RequestParam(value = "profile") profileId: Int): List<ListConversationsDTO>? {
         if(this.profileService.profileExistById(profileId)) {
@@ -98,9 +96,6 @@ class ChatController(private val profileService: ProfileService,
                         }
                     }
 
-
-
-
                     if(matches.profileFirst.id==profileId && findConversationBetweenTwoUsers!=null) {
                         val profilePhoto = imageUserService.getMainPhoto(matches.profileSecond)
                         val dateFormated:String
@@ -111,8 +106,6 @@ class ChatController(private val profileService: ProfileService,
                             dateFormated = SimpleDateFormat("HH:mm").format(findConversationBetweenTwoUsers.dateMessage)
                         else
                             dateFormated = SimpleDateFormat("dd/MM").format(findConversationBetweenTwoUsers.dateMessage)
-
-
 
                         val conversation = ListConversationsDTO(
                             matches.profileSecond.name,

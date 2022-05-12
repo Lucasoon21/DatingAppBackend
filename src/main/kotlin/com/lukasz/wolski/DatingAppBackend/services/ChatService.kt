@@ -1,12 +1,9 @@
 package com.lukasz.wolski.DatingAppBackend.services
 
-import com.lukasz.wolski.DatingAppBackend.model.BlockUserModel
 import com.lukasz.wolski.DatingAppBackend.model.ChatModel
 import com.lukasz.wolski.DatingAppBackend.model.ProfileModel
-import com.lukasz.wolski.DatingAppBackend.repositories.BlockUserRepository
 import com.lukasz.wolski.DatingAppBackend.repositories.ChatRepository
 import org.springframework.stereotype.Service
-import java.util.ArrayList
 
 @Service
 class ChatService(private val chatRepository: ChatRepository) {

@@ -22,6 +22,9 @@ class ProfileService(private val profileRepository: ProfileRepository, private v
     fun profileExistById(id: Int): Boolean {
         return this.profileRepository.existsById(id)
     }
+    fun getAllProfiles(): List<ProfileModel> {
+        return this.profileRepository.findAll()
+    }
 
     fun getProfileById(id: Int): ProfileModel {
         return this.profileRepository.getById(id)

@@ -106,7 +106,6 @@ class ProfileUserController(
         return ResponseEntity.badRequest().body("Nie usunięto konta\n")
     }
 
-
     @PutMapping("activateAccount")
     fun activateAccount(@RequestParam(value = "profile") profileId: Int, response: HttpServletResponse): ResponseEntity<String> {
         if (this.profileService.profileExistById(profileId)) {
@@ -125,11 +124,6 @@ class ProfileUserController(
         println("Błąd")
         return ResponseEntity.badRequest().body("Bład")
     }
-
-
-
-
-
 
 
     @PutMapping("changeDescription")
@@ -152,7 +146,7 @@ class ProfileUserController(
         }
     }
 
-    @RequestMapping("getDescription")
+    @GetMapping("getDescription")
     fun getDescription(@RequestParam(value = "profile") profileId: Int): GetDescriptionDTO? {
         if (this.profileService.profileExistById(profileId)){
             val profile = this.profileService.getProfileById(profileId)
@@ -171,13 +165,9 @@ class ProfileUserController(
 
 
 
-
-
-
-
-        @PutMapping("changeProfileDetails")
+    @PutMapping("changeProfileDetails")
     fun changeProfileDetails(@RequestBody body: ChangeProfileDetailsDTO, response: HttpServletResponse): ResponseEntity<String> {
-
+            println(body.toString())
         if (this.profileService.profileExistById(body.profileId)) {
             println(body.profileId)
             val oldProfile = profileService.getProfileById(body.profileId)
@@ -191,11 +181,12 @@ class ProfileUserController(
             val eyeColor = dictionaryService.getEyeColor(body.eyeColorId)
             val religious = dictionaryService.getReligious(body.religiousId)
             val job = body.job
+            val city = body.city
             //val zodiac = dictionaryService.getZodiac(body.zodiacId)
 
             if(orientation != null && (height in 140..200) && (weight in 40..130) && alcohol!=null
                 && children!=null && cigarettes!=null && education!=null && eyeColor!=null
-                    && religious!=null && job.length<=50) {
+                    && religious!=null && job.length<=50 && city.length<=50) {
                 oldProfile.height = height
                 oldProfile.weight = weight
                 oldProfile.dictionaryOrientation = orientation
@@ -206,6 +197,7 @@ class ProfileUserController(
                 oldProfile.dictionaryEyeColor = eyeColor
                 oldProfile.dictionaryReligious = religious
                 oldProfile.job = job
+                oldProfile.location = city
                 this.profileService.save(oldProfile)
                 return ResponseEntity.ok().body("Zmieniono szczegóły profilu\n")
 
@@ -220,7 +212,7 @@ class ProfileUserController(
         }
     }
 
-    @RequestMapping("getProfileRelationship")
+    @GetMapping("getProfileRelationship")
     fun getProfileRelationship(@RequestParam(value = "profile") profileId: Int): ArrayList<InterestedRelationshipDTO>? {
         println("profileId "+profileId)
         if (this.profileService.profileExistById(profileId))
@@ -298,15 +290,18 @@ class ProfileUserController(
         println("ddd")
     }
 
-    @PutMapping("getProfileDetails")
-    fun getProfileDetails(@RequestBody body: GetProfileDTO, response: HttpServletResponse): ResponseEntity<ProfileDTO> {
 
-        if (this.profileService.profileExistById(body.profileId)) {
-            val oldProfile = this.profileService.getProfileById(body.profileId)
+
+
+    @GetMapping("getProfileDetails")
+    fun getProfileDetails(@RequestParam(value = "profile") profileId: Int, response: HttpServletResponse): ResponseEntity<ProfileDTO> {
+
+        if (this.profileService.profileExistById(profileId)) {
+            val oldProfile = this.profileService.getProfileById(profileId)
 
             //val ageUser: Int = oldProfile.data_birth.
             val localNow: LocalDate = LocalDate.now()
-            val birthDate: LocalDate = LocalDate.fromDateFields(oldProfile.date_birth)
+            val birthDate: LocalDate = LocalDate.fromDateFields(oldProfile.dateBirth)
             val age: Years = Years.yearsBetween(birthDate, localNow)
 
 
@@ -315,7 +310,7 @@ class ProfileUserController(
                 oldProfile.dictionaryGender?.name ?: "",
                 oldProfile.dictionaryOrientation?.name?: "",
                 oldProfile.description?: "",
-                oldProfile.location?: "",
+
                 oldProfile.dictionaryAlcohol?.name?: "",
                 oldProfile.job?: "",
                 oldProfile.height,
@@ -325,8 +320,8 @@ class ProfileUserController(
                 oldProfile.dictionaryChildren?.name ?: "",
                 oldProfile.dictionaryCigarettes?.name?: "",
                 oldProfile.dictionaryEyeColor?.name?: "",
-                oldProfile.dictionaryZodiac?.name ?: "",
                 age.years?:0,
+                oldProfile.location ?: ""
             )
 
 
@@ -339,7 +334,7 @@ class ProfileUserController(
         }
     }
 
-    @RequestMapping("getProfileHobby")
+    @GetMapping("getProfileHobby")
     fun getProfileHobby(@RequestParam(value = "profile") profileId: Int): ArrayList<HobbyUserDTO>? {
         if (this.profileService.profileExistById(profileId)) {
             val listHobby = dictionaryService.getAllHobbyDictionary()
@@ -426,6 +421,9 @@ class ProfileUserController(
         println(body.listHobby)
     }
 
+
+
+
     @PutMapping("uploadImage")
     fun uploadImage(@RequestBody body: ProfileImageDTO, response: HttpServletResponse): ResponseEntity<String> {
 
@@ -451,7 +449,10 @@ class ProfileUserController(
         }
     }
 
-    @RequestMapping("getProfileImages")
+
+
+
+    @GetMapping("getProfileImages")
     fun getProfileImages(@RequestParam(value = "profile") profileId: Int): ArrayList<ProfileImageDTO>? {
         if (this.profileService.profileExistById(profileId)) {
             val profile = profileService.getProfileById(profileId)
@@ -475,7 +476,7 @@ class ProfileUserController(
         return null
     }
 
-    @RequestMapping("getMainPhotoProfile")
+    @GetMapping("getMainPhotoProfile")
     fun getMainPhotoProfile(@RequestParam(value = "profile") profileId: Int): ImageUserModel? {
         if (this.profileService.profileExistById(profileId)) {
             val profile = profileService.getProfileById(profileId)
@@ -509,8 +510,6 @@ class ProfileUserController(
         }
         return ResponseEntity.badRequest().body("Pojawił się błąd zdjęcia")
     }
-
-
 
     @DeleteMapping("deleteProfileImage")
     fun deleteImageProfile(@RequestBody body: ProfileImageDTO): ResponseEntity<String> {

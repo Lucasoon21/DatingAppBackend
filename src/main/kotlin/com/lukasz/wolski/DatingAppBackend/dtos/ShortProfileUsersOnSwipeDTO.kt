@@ -6,6 +6,6 @@ data class ShortProfileUsersOnSwipeDTO(
     val profileId: Int,
     val name: String,
     val age: Int,
-    val job: String?,
+    val city: String?,
     val image: ImageUserModel?
 )

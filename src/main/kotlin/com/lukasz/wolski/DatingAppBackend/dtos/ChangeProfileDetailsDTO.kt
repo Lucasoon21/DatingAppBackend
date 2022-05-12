@@ -12,4 +12,5 @@ data class ChangeProfileDetailsDTO(
     var childrenId: Int,
     var cigarettesId: Int,
     var eyeColorId: Int,
+    val city: String,
 )

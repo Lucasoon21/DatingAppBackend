@@ -13,49 +13,25 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.CrossOrigin
 import java.util.*
 
-
 @CrossOrigin
 @Controller
-class JavaChatController(private val profileService: ProfileService,
-                         private val imageUserService: ImageUserService,
-) {
-
+class WebsocketChatController(private val profileService: ProfileService,
+                              private val imageUserService: ImageUserService) {
     @Autowired
     private val simpMessagingTemplate: SimpMessagingTemplate? = null
 
-    @CrossOrigin
-    @MessageMapping("/message")
-    @SendTo("/chatroom/public")
-    fun receivePublicMessage(@Payload sendMessageDTO: SendMessageChatTestDTO): SendMessageChatTestDTO {
-        println("-----------------------------------------------------------------")
-        println("-----------------------------------------------------------------")
-
-        println("jest jakas publuczna wiadomoscc===")
-        return sendMessageDTO
-    }
-
-    @CrossOrigin
     @MessageMapping("/private-message")
-    //@SendTo("/chatroom/public")
     fun receivePrivateMessage(@Payload sendMessageDTO: SendMessageChatTestDTO): SendMessageChatTestDTO {
-        println("-----------------------------------------------------------------")
-        println("-----------------------------------------------------------------")
-
-        println("JEst wiadomosc prywatna")
         simpMessagingTemplate!!.convertAndSendToUser(
             sendMessageDTO.receiverProfileId.toString(),
             "/private",
             sendMessageDTO
         )
-        println(sendMessageDTO.toString())
         return sendMessageDTO
     }
 
     @MessageMapping("/chat/{to}")
     fun sendMessage(@DestinationVariable to: String, message: SendMessageDTO) {
-//    fun sendMessage(@DestinationVariable to: String, message: SendMessageChatTestDTO) {
-        println("handling send message: ${message.contentMessage} to: $to from: ${message.senderProfileId}")
-
         if(this.profileService.profileExistById(to.toInt()) && this.profileService.profileExistById(message.senderProfileId.toInt())) {
             val profileSender = this.profileService.getProfileById(message.senderProfileId.toInt())
             val profileReceiver = this.profileService.getProfileById(to.toInt())
@@ -72,12 +48,10 @@ class JavaChatController(private val profileService: ProfileService,
                 message.senderProfileId.toInt(),
                 user
             )
-            println("Wyslano wiadomosc")
             simpMessagingTemplate!!.convertAndSend("/topic/messages/$to", singleConversation)
         } else {
             println("uzytkownicy nie istnieja")
         }
-
     }
-
 }
+

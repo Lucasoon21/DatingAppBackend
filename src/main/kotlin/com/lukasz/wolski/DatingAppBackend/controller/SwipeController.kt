@@ -2,13 +2,16 @@ package com.lukasz.wolski.DatingAppBackend.controller
 
 import com.lukasz.wolski.DatingAppBackend.dtos.ShortProfileUsersOnSwipeDTO
 import com.lukasz.wolski.DatingAppBackend.model.DictionaryGenderModel
+import com.lukasz.wolski.DatingAppBackend.model.DictionaryHobbyModel
 import com.lukasz.wolski.DatingAppBackend.model.ProfileModel
 import com.lukasz.wolski.DatingAppBackend.services.*
 import org.joda.time.LocalDate
 import org.joda.time.Years
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import kotlin.collections.ArrayList
 
 @RestController
 @RequestMapping("swipe")
@@ -18,11 +21,13 @@ class SwipeController(private val userService: UserService,
                       private val imageUserService: ImageUserService,
                       private val swipeDecisionService: SwipeDecisionService,
                       private val interestedGenderService: InterestedGenderService,
+                      private val interestedHobbyService: InterestedHobbyService,
+                      private val hobbyUserService: HobbyUserService,
                       private val dictionaryService: DictionaryService
                       ) {
 
 
-    @RequestMapping("getLikesForMyProfile")
+    @GetMapping("getLikesForMyProfile")
     fun getLikesForMyProfile(@RequestParam(value = "profile") profileId: Int): ArrayList<ShortProfileUsersOnSwipeDTO>? {
         if (this.profileService.profileExistById(profileId)) {
             val profile = profileService.getProfileById(profileId)
@@ -44,7 +49,7 @@ class SwipeController(private val userService: UserService,
             if (likedMe != null) {
                 for(profiles in likedMe) {
                     val localNow: LocalDate = LocalDate.now()
-                    val birthDate: LocalDate = LocalDate.fromDateFields(profiles.userGiven.date_birth)
+                    val birthDate: LocalDate = LocalDate.fromDateFields(profiles.userGiven.dateBirth)
                     val age: Years = Years.yearsBetween(birthDate, localNow)
                     val profilePhoto = imageUserService.getMainPhoto(profiles.userGiven)
 
@@ -52,7 +57,7 @@ class SwipeController(private val userService: UserService,
                         profiles.userGiven.id,
                         profiles.userGiven.name,
                         age.years,
-                        profiles.userGiven.job,
+                        profiles.userGiven.location,
                         profilePhoto
                     )
                     returnListProfiles.add(shortProfile)
@@ -65,52 +70,65 @@ class SwipeController(private val userService: UserService,
         return null;
     }
 
-
-
-
-    @RequestMapping("getAllProfile")
-    fun helloWorld(@RequestParam(value = "profile") profileId: Int): ArrayList<ShortProfileUsersOnSwipeDTO>? {
+    @GetMapping("getAllProfile")
+    fun getAllProfile(@RequestParam(value = "profile") profileId: Int): ArrayList<ShortProfileUsersOnSwipeDTO>? {
+        println("Profile Id = "+profileId)
         if (this.profileService.profileExistById(profileId)) {
+
             val profile = this.profileService.getProfileById(profileId)
             val allLikesProfiles = this.swipeDecisionService.getAllLiked(profile)
             val likedProfiles:ArrayList<Int> = allLikesProfiles.map { it.userReceiver.id } as ArrayList<Int>
-            likedProfiles.add (profileId)
+            likedProfiles.add (profileId) //lajkowane profile nie będą wyświetlane. Do listy dodany jest też nasz profil
 
             //Szukanie preferencji co do płci
             val genderPreferencesUser = interestedGenderService.getAllInterestedGenderByProfile(profile)
             val genderInter:ArrayList<DictionaryGenderModel>
             if(genderPreferencesUser!=null && genderPreferencesUser.size!=0){
+                //jesli uzytkownik podal swoje preferencje to pobierz liste tylko zainteresowanych plci
                 genderInter = genderPreferencesUser.map { it.gender } as ArrayList<DictionaryGenderModel>
-                println("Znaleziono zainteresowane płcie "+genderPreferencesUser.size)
-            } else {
+            } else { //jesli uzytkownik nie podal preferencji co do płci to wyswietl uzytkowników wszystkich płci
                 genderInter = dictionaryService.getAllGenderDictionary() as ArrayList<DictionaryGenderModel>
-                println("Nie znaleziono zainteresowane płcie ")
+            }
+
+            //szukanie po hobby
+            val hobbyPreferencesUser = interestedHobbyService.getAllOnlyInterestedHobbyByProfile(profile)
+            var hobbyInter: ArrayList<DictionaryHobbyModel> = ArrayList()
+            //jesli uzytkownik ma wybrane jakies hobby to wybierz te które zaznaczył
+            var userTooInterstedHobby: ArrayList<Int> = ArrayList()
+            if(hobbyPreferencesUser!=null && hobbyPreferencesUser.size!=0) {
+                hobbyInter = hobbyPreferencesUser.map { it.hobby } as ArrayList<DictionaryHobbyModel>
+                val profileWhoInterstedToo = hobbyUserService.getAllProfileWhoInterstedToo(hobbyInter)
+                if(profileWhoInterstedToo!=null && profileWhoInterstedToo.size!=0) {
+                    userTooInterstedHobby = profileWhoInterstedToo.map { it.profile!!.id } as ArrayList<Int>
+                }
             }
 
 
-
-            val detailsProfile = this.swipeDecisionService.getAllProfiles(profile, likedProfiles, genderInter)
-            println("Liczba znalezionych profili = "+ (detailsProfile?.size ?: 0))
-            if(detailsProfile != null) {
+            val searchProfile: List<ProfileModel>?
+            if(hobbyPreferencesUser!=null && hobbyPreferencesUser.size!=0) {
+                searchProfile = this.swipeDecisionService.getAllProfiles(profile, likedProfiles, genderInter, userTooInterstedHobby)
+            } else {
+                searchProfile = this.swipeDecisionService.getAllProfiles(profile, likedProfiles, genderInter)
+            }
+            if(searchProfile != null) {
                 val returnListProfiles =  ArrayList<ShortProfileUsersOnSwipeDTO>()
-                for (profiles in detailsProfile) {
+                for (profiles in searchProfile) {
                     val localNow: LocalDate = LocalDate.now()
-                    val birthDate: LocalDate = LocalDate.fromDateFields(profiles.date_birth)
+                    val birthDate: LocalDate = LocalDate.fromDateFields(profiles.dateBirth)
                     val age: Years = Years.yearsBetween(birthDate, localNow)
-
                     val profilePhoto = imageUserService.getMainPhoto(profiles)
                     val shortProfile = ShortProfileUsersOnSwipeDTO(
                         profiles.id,
                         profiles.name,
                         age.years,
-                        profiles.job,
+                        profiles.location,
                         profilePhoto
                     )
                     returnListProfiles.add(shortProfile)
                 }
+                returnListProfiles.shuffle()
                 return returnListProfiles
             }
-
         }
         return null
     }
