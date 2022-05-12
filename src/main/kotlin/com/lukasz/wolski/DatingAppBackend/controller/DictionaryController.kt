@@ -52,8 +52,5 @@ class DictionaryController(private val dictionaryService: DictionaryService) {
     fun getAllReligiousDictionary(response: HttpServletResponse): List<DictionaryReligiousModel>? {
         return dictionaryService.getAllReligiousDictionary()
     }
-    @GetMapping("getAllZodiacDictionary")
-    fun getAllZodiacDictionary(response: HttpServletResponse): List<DictionaryZodiacModel>? {
-        return dictionaryService.getAllZodiacDictionary()
-    }
+
 }

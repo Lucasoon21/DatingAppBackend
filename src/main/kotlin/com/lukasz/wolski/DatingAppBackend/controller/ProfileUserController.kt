@@ -182,7 +182,7 @@ class ProfileUserController(
             val religious = dictionaryService.getReligious(body.religiousId)
             val job = body.job
             val city = body.city
-            //val zodiac = dictionaryService.getZodiac(body.zodiacId)
+            
 
             if(orientation != null && (height in 140..200) && (weight in 40..130) && alcohol!=null
                 && children!=null && cigarettes!=null && education!=null && eyeColor!=null

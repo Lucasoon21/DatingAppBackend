@@ -46,9 +46,7 @@ import javax.persistence.*
     @Column
     var weight: Int? = 0,
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="d_zodiac", nullable = true)
-    var dictionaryZodiac: DictionaryZodiacModel? = null,
+
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="d_education", nullable = true)

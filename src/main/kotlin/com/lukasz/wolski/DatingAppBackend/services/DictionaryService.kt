@@ -15,7 +15,7 @@ class DictionaryService(private val dictionaryAlcoholRepository: DictionaryAlcoh
                         private val dictionaryOrientationRepository: DictionaryOrientationRepository,
                         private val dictionaryRelationshipRepository: DictionaryRelationshipRepository,
                         private val dictionaryReligiousRepository: DictionaryReligiousRepository,
-                        private val dictionaryZodiacRepository: DictionaryZodiacRepository,
+
 
                         ) {
     fun getAllAlcoholDictionary(): List<DictionaryAlcoholModel>? {
@@ -48,9 +48,7 @@ class DictionaryService(private val dictionaryAlcoholRepository: DictionaryAlcoh
     fun getAllReligiousDictionary(): List<DictionaryReligiousModel>? {
         return this.dictionaryReligiousRepository.findAll()
     }
-    fun getAllZodiacDictionary(): List<DictionaryZodiacModel>? {
-        return this.dictionaryZodiacRepository.findAll()
-    }
+
 
 
 
@@ -72,9 +70,7 @@ class DictionaryService(private val dictionaryAlcoholRepository: DictionaryAlcoh
     fun getReligious(id: Int): DictionaryReligiousModel? {
         return this.dictionaryReligiousRepository.getAllById(id)
     }
-    fun getZodiac(id: Int): DictionaryZodiacModel? {
-        return this.dictionaryZodiacRepository.getAllById(id)
-    }
+
     fun getHobby(id: Int): DictionaryHobbyModel? {
         return this.dictionaryHobbyRepository.getAllById(id)
     }
