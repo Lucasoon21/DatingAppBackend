@@ -1,0 +1,1 @@
+  web: java -jar build/libs/DatingApp-Backend4-1.0.jar

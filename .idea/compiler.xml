@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="DatingAppBackend" target="11.0.15" />
+      <module name="DatingAppBackend" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
