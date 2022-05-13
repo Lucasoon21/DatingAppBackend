@@ -47,7 +47,7 @@ class ProfileUserController(
                 }
                 if(isValidPassword(body.newConfirmPassword) && isValidPassword(body.newPassword) &&
                         body.newPassword==body.newPassword) {
-                    println("ZMiana hasła")
+                  
                     user.password = body.newPassword
                     userService.save(user)
                     return ResponseEntity.ok().body("Zmieniono hasło")
@@ -167,7 +167,7 @@ class ProfileUserController(
 
     @PutMapping("changeProfileDetails")
     fun changeProfileDetails(@RequestBody body: ChangeProfileDetailsDTO, response: HttpServletResponse): ResponseEntity<String> {
-            println(body.toString())
+        
         if (this.profileService.profileExistById(body.profileId)) {
             println(body.profileId)
             val oldProfile = profileService.getProfileById(body.profileId)
@@ -231,16 +231,15 @@ class ProfileUserController(
                         item.name
                     )
                     returnListRelationship.add(relationship)
-                    println("Dodano do array")
+                  
                 }
                 if (relationshipUser != null) {
                     for(item in relationshipUser){
-                        println("item in relationshipUser")
+                      
                         val e = returnListRelationship.indexOfFirst { it.relationshipId == item.relationship.id }
                         returnListRelationship[e].decision = item.decison
                     }
                 }
-                println("returnListRelationship "+returnListRelationship.toString())
                 return returnListRelationship
             }
             else {
@@ -287,7 +286,7 @@ class ProfileUserController(
         } else {
             println("nie znaleziono uzytkownika")
         }
-        println("ddd")
+     
     }
 
 
@@ -430,7 +429,7 @@ class ProfileUserController(
         if (this.profileService.profileExistById(body.profileId)) {
             val profile = this.profileService.getProfileById(body.profileId)
             val imagesProfile = this.imageService.getAllMainPhoto(profile)
-            println(imagesProfile)
+            
             val image = ImageUserModel()
             image.createDate = Date()
             image.deleteHashImgur=body.deleteHashImgur

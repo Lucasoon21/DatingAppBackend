@@ -41,9 +41,6 @@ class SwipeController(private val userService: UserService,
 
             val likedMe = swipeDecisionService.getAllLikeMe(profile, profileILike)
 
-            println("myLike "+myLike.size) // wszystki lajki które ja dałem
-            println("profileILike "+profileILike.size) // wsszystkie profile którym dałem like
-            println("likedMe "+ (likedMe?.size ?: 0))
 
             val returnListProfiles =  ArrayList<ShortProfileUsersOnSwipeDTO>()
             if (likedMe != null) {
@@ -72,7 +69,6 @@ class SwipeController(private val userService: UserService,
 
     @GetMapping("getAllProfile")
     fun getAllProfile(@RequestParam(value = "profile") profileId: Int): ArrayList<ShortProfileUsersOnSwipeDTO>? {
-        println("Profile Id = "+profileId)
         if (this.profileService.profileExistById(profileId)) {
 
             val profile = this.profileService.getProfileById(profileId)

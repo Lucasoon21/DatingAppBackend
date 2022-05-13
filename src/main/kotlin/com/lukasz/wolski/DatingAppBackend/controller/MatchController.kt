@@ -29,11 +29,9 @@ class MatchController(
             val match = matchService.getMatch(profileFirst, profileSecond)
             val match2 = matchService.getMatch(profileSecond, profileFirst)
             if(match!=null) {
-                println("match.id "+match.id)
                 matchService.deleteMatch(match.id)
                 return ResponseEntity.ok().body("usunięto match\n")
             } else if(match2!=null) {
-                println("match2.id "+match2.id)
                 matchService.deleteMatch(match2.id)
                 return ResponseEntity.ok().body("usunięto match\n")
             } else {

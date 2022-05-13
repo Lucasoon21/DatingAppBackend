@@ -38,7 +38,7 @@ class AuthController(private val userService: UserService,
 
     val EMAIL_ADDRESS_PATTERN: Pattern = Pattern.compile("^[a-zA-Z0-9.!#\$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*\$", Pattern.CASE_INSENSITIVE);
     val PASSWORD_PATTERH: Pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{6,20}\$") //jedna litera, jedna mała liczba, jedna duża liczba, jeden znak specjalny, od 6 do 20 znaków
-    val NAME_PATTERH: Pattern = Pattern.compile("^[A-Za-z\\s]{2,20}\$") //litery i spacje, od 2 do 20 znaków
+    val NAME_PATTERH: Pattern = Pattern.compile("^[A-Za-z\\s]{2,30}\$") //litery i spacje, od 2 do 20 znaków
     fun isValidEmail(str: String): Boolean{
         return EMAIL_ADDRESS_PATTERN.matcher(str).matches()
     }
@@ -118,7 +118,6 @@ class AuthController(private val userService: UserService,
     @PostMapping("registerDetails")
     fun registerDetails(@RequestBody body: RegisterDetailsDTO, response: HttpServletResponse) {
 
-        println(body.orientation)
         val profile = ProfileModel()
         profile.dateBirth = body.dateBirth
         profile.name = body.name
@@ -160,8 +159,6 @@ class AuthController(private val userService: UserService,
 
     @PostMapping("login")
     fun login(@RequestBody body: LoginDTO, response: HttpServletResponse): ResponseEntity<String> {
-        println("proba logowania")
-        println(body)
         val res: MutableMap<String, String> = HashMap()
         res["isError"] = "NO"
         res["email"] = "OK"
@@ -183,7 +180,6 @@ class AuthController(private val userService: UserService,
             val userId = this.userService.findIdByEmail(body.email)
             val userProfile = userService.getUser(body.email)
             if (userProfile != null) {
-                println(userProfile.id)
                 val profileId = profileService.findIdByUser(body.email)
                 val profile = profileService.getProfileById(profileId)
                 if(profile.isActive==false || userProfile.isActive==false)

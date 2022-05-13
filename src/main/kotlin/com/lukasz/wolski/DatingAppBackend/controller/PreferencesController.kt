@@ -64,19 +64,16 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
     fun changePreferencesGender(@RequestBody body: ChangeGenderPreferencesDTO, response: HttpServletResponse) {
         val profileId = body.profileId
         val newPreferencesGenderList = body.listGender  //3
-        println(newPreferencesGenderList.size)
        if (this.profileService.profileExistById(profileId)) {
             val profile = this.profileService.getProfileById(profileId)
             val listPreferencesGender =  this.interestedGenderService.getAllInterestedGenderByProfile(profile) //0
             val listGender = dictionaryService.getAllGenderDictionary() //3
-           println(listPreferencesGender?.size ?: 0)
-           println(listGender?.size ?: 0)
+
 
             if (listGender != null) {
                 for(newGenderPreferences in newPreferencesGenderList) {
                     val gender = this.dictionaryService.getGender(newGenderPreferences.genderId)
                     if(gender != null){
-                        println("Rozne od 0")
                         val oldGender = this.interestedGenderService.getInterestedGenderByProfileId(profile,gender)
 
                         if(oldGender != null) {
@@ -133,9 +130,9 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
 
     @PutMapping("changeAgePreferences")
     fun editAgePreferences(@RequestBody body: InterestedAgeDTO, response: HttpServletResponse) {
-
+        
         if (this.profileService.profileExistById(body.profileId)) {
-            if(body.ageFrom<body.ageTo && body.ageFrom>18 && body.ageTo<60) {
+            if(body.ageFrom<body.ageTo && body.ageFrom>=18 && body.ageTo<=60) {
                 val profile = this.profileService.getProfileById(body.profileId)
                 val oldAgePreferences = this.interestedAgeService.getInterestedAgeByProfileId(profile)
                 if(oldAgePreferences!=null) {
@@ -326,7 +323,6 @@ class PreferencesController(private val interestedAgeService: InterestedAgeServi
 
 
         if (this.profileService.profileExistById(body.profileId)) {
-            println(body.toString())
             if(body.weightFrom<body.weightTo && body.weightFrom>=40 && body.weightTo<=130) {
                 val profile = this.profileService.getProfileById(body.profileId)
                 var oldWeightPreferences = this.interestedWeightService.getInterestedWeightByProfile(profile)
