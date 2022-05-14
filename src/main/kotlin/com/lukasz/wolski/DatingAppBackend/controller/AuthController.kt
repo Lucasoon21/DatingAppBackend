@@ -166,7 +166,7 @@ class AuthController(private val userService: UserService,
         res["user"] = "OK"
         res["isActive"] = "OK"
         res["isOver18Years"] = "OK"
-        val userLogin = this.userService.findByEmail(body.email)
+        val userLogin = this.userService.findByEmail(body.email.lowercase())
         if(userLogin!=null){
 
             if (!userLogin.comparePassword(body.password)) {
@@ -177,10 +177,10 @@ class AuthController(private val userService: UserService,
                 return ResponseEntity.ok().body("Złe hasło\n")
             }
 
-            val userId = this.userService.findIdByEmail(body.email)
-            val userProfile = userService.getUser(body.email)
+            val userId = this.userService.findIdByEmail(body.email.lowercase())
+            val userProfile = userService.getUser(body.email.lowercase())
             if (userProfile != null) {
-                val profileId = profileService.findIdByUser(body.email)
+                val profileId = profileService.findIdByUser(body.email.lowercase())
                 val profile = profileService.getProfileById(profileId)
                 if(profile.isActive==false || userProfile.isActive==false)
                 {
@@ -191,8 +191,8 @@ class AuthController(private val userService: UserService,
                     val birthDate: LocalDate = LocalDate.fromDateFields(profile.dateBirth)
                     val age: Years = Years.yearsBetween(birthDate, localNow)
                     if(age.years>=18) {
-                        val accessToken:String = getAccessToken(body.email)
-                        val refreshToken:String = getRefreshToken(body.email)
+                        val accessToken:String = getAccessToken(body.email.lowercase())
+                        val refreshToken:String = getRefreshToken(body.email.lowercase())
                         res["access_token"] = accessToken
                         res["refresh_token"] = refreshToken
                         res["profile_id"] = profileId.toString()
