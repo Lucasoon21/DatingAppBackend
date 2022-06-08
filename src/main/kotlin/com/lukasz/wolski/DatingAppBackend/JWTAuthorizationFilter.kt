@@ -34,7 +34,7 @@ class JWTAuthorizationFilter : OncePerRequestFilter() {
     ) {
         val secretKey = "sekretnyKlucz"
         println(request.servletPath)
-        if (request.servletPath == "/auth/login" || request.servletPath == "/auth/token/refresh") {
+        if (request.servletPath == "/auth/login" || request.servletPath == "/auth/token/refresh" ||  request.servletPath == "/dictionary/getAllGenderDictionary" ||  request.servletPath == "/dictionary/getAllOrientationDictionary") {
             filterChain.doFilter(request, response)
         } else {
             val authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
